@@ -9,6 +9,8 @@ use pocketmine\utils\TextFormat;
 
 class MainClass extends PluginBase implements Listener {
     public function onEnable() {
+	@mkdir($this->getDataFolder());
+  	$this->badPlayers = new Config($this->getDataFolder()."factions-list.txt", Config::ENUM);
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
 	$this->getServer()->getPluginManager()->registerEvents(new Events($this), $this);
         $this->getLogger()->info(TextFormat::YELLOW . "[FactionsPP] Loaded!");
