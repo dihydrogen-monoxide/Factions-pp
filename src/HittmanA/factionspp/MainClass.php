@@ -7,7 +7,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\event\Listener;
 use pocketmine\utils\TextFormat;
 
-class MainClass extends PluginBase implements Listener {
+class FactionsPP\MainClass extends PluginBase implements Listener {
     public function onEnable() {
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
 		    $this->getServer()->getPluginManager()->registerEvents(new Events($this), $this);
