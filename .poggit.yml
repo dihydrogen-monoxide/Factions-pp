@@ -1,0 +1,7 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/dihydrogen-monoxide/Factions-pp
+branches:
+- master
+projects:
+  Factions-pp:
+    path: ""
+...
