@@ -20,7 +20,10 @@ class MainClass extends PluginBase implements Listener {
     }
     public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
         switch ($command->getName()) {
-            default:
+		case "factionspp":
+			
+			break;
+	    default:
                 return false;
         }
     }
