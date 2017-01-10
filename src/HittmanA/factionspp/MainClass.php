@@ -1,5 +1,5 @@
 <?php
-namespace HittmanA\factionspp\MainClass;
+namespace HittmanA\factionspp;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
