@@ -11,7 +11,7 @@ use pocketmine\utils\Config;
 class MainClass extends PluginBase implements Listener {
     public function onEnable() {
 	@mkdir($this->getDataFolder());
-  	$facs = new Config($this->getDataFolder() . "factions.yml", Config::JSON);
+  	$facs = new Config($this->getDataFolder() . "factions.json", Config::JSON);
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
 	$this->getServer()->getPluginManager()->registerEvents(new Events($this), $this);
         $this->getLogger()->info(TextFormat::YELLOW . "[FactionsPP] Loaded!");
