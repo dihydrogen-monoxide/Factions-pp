@@ -26,7 +26,7 @@ class MainClass extends PluginBase implements Listener {
 			if($subcmd == "create") {
 				$cfgfac = $args[2];
 				$write = array("name" => $cfgfac, "Leader" => $sender, "Officers" => array(), "Members" => array());
-				$facs->set($write);
+				$facs->set("assoc",serialize($write));
 				$facs->save();
 			}
 			break;
