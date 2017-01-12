@@ -32,7 +32,7 @@ class MainClass extends PluginBase implements Listener {
                 $cfgfac = $args[1];
                 $write = array("name" => $cfgfac, "Leader" => $sender, "Officers" => array(), "Members" => array());
                 $this->facs->set($cfgfac, $write);
-                $this->$facs->save();
+                $this->facs->save();
             }
             break;
         default:
