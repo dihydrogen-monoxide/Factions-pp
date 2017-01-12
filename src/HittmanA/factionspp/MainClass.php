@@ -30,33 +30,46 @@ class MainClass extends PluginBase implements Listener {
 
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
 		$displayName = $sender->getName();
+		$subcmd = strtolower(array_shift($args));
 		switch ($command->getName()) {
 			case "factionspp":
 			case "fpp":
 			case "f":
 				if($sender instanceof Player) {
-					if(isset($args[1])) {
-						if(strtolower(array_shift($args)) === "create") {
-							$facName = array_shift($args);
-							$this->facs->set($facName, [
-								"name" => strtolower($facName),
-								"display" => $facName,
-								"leader" => $displayName,
-								"officers" => [],
-								"members" => []
-							]);
-							$this->playerInfo->set($displayName,[
-								"name" => $displayName,
-								"faction" => $facName,
-								"role" => "Leader"
-							]);
-							$this->facs->save(true);
-							$this->playerInfo->save(true);
-							$sender->sendMessage(TextFormat::GREEN . "Faction created!");
+						if($subcmd === "create") {
+							if(isset($args[1])) {
+								if(isset($this->playerInfo->$displayName->faction)) {
+									$facName = array_shift($args);
+									$this->facs->set($facName, [
+										"name" => strtolower($facName),
+										"display" => $facName,
+										"leader" => $displayName,
+										"officers" => [],
+										"members" => []
+									]);
+									$this->playerInfo->set($displayName,[
+										"name" => $displayName,
+										"faction" => $facName,
+										"role" => "Leader"
+									]);
+									$this->facs->save(true);
+									$this->playerInfo->save(true);
+									$sender->sendMessage(TextFormat::GREEN . "Faction created!");
+								}
+							} else {
+								$sender->sendMessage(TextFormat::GOLD . "Usage: /factionspp create <name>");
+							}
+						}elseif ($subcmd === "info") {
+							if(isset($this->playerInfo->$displayName)) {
+								$playerFPPProfile = $this->playerInfo->$displayName;
+								$playerFac = $playerFPPProfile->faction;
+								$playerFacInfo = $this->facs->$playerFac;
+								$sender->sendMessage(TextFormat::GOLD . "Faction: " . $playerFac);
+								$sender->sendMessage(TextFormat::GREEN . "Your Role: " . $playerFPPProfile->role);
+							}else{
+								$sender->sendMessage(TextFormat::RED . "You must be part of a faction to run this command!");
+							}
 						}
-					} else {
-						$sender->sendMessage(TextFormat::GOLD . "Usage: /factionspp create <name>");
-					}
 				} else {
 					$sender->sendMessage(TextFormat::RED . "Please run this command in-game");
 				}
