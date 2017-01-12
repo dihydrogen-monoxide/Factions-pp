@@ -7,6 +7,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Config;
 
@@ -14,7 +15,8 @@ class MainClass extends PluginBase implements Listener {
 
 	/** @var Config */
 	protected $fac;
-
+	//Faction name tag coming soon >:D
+	//$player->setDisplayName("My Rank" . $player->getName());
 	public function onEnable() {
 		@mkdir($this->getDataFolder());
 		$this->facs = new Config($this->getDataFolder() . "factions.json", Config::JSON, []);
@@ -28,6 +30,12 @@ class MainClass extends PluginBase implements Listener {
 		$this->getLogger()->info(TextFormat::YELLOW . "Unloading!");
 	}
 
+	public function onJoin(PlayerJoinEvent $event) {
+		$prefix = "[]"
+		$player->setDisplayName("My Rank" . $player->getName());
+		$player->setNameTag("My Rank" . $player->getName());
+	}
+
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
 		$displayName = $sender->getName();
 		$subcmd = strtolower(array_shift($args));
@@ -37,8 +45,10 @@ class MainClass extends PluginBase implements Listener {
 			case "f":
 				if($sender instanceof Player) {
 						if($subcmd === "create") {
-							if(isset($args[1])) {
+							if(isset($args[0])) {
 								if(isset($this->playerInfo->$displayName->faction)) {
+									$sender->sendMessage(TextFormat::RED . "You are already in a faction!");
+								}else{
 									$facName = array_shift($args);
 									$this->facs->set($facName, [
 										"name" => strtolower($facName),
@@ -62,8 +72,11 @@ class MainClass extends PluginBase implements Listener {
 						}elseif ($subcmd === "info") {
 							if(isset($this->playerInfo->$displayName)) {
 								$playerFPPProfile = $this->playerInfo->$displayName;
+								$sender->sendMessage(TextFormat::RED . "[FPP DEBUG] " . $playerFPPProfile);
 								$playerFac = $playerFPPProfile->faction;
+								$sender->sendMessage(TextFormat::RED . "[FPP DEBUG] " . $playerFac);
 								$playerFacInfo = $this->facs->$playerFac;
+								$sender->sendMessage(TextFormat::RED . "[FPP DEBUG] " . $playerFacInfo);
 								$sender->sendMessage(TextFormat::GOLD . "Faction: " . $playerFac);
 								$sender->sendMessage(TextFormat::GREEN . "Your Role: " . $playerFPPProfile->role);
 							}else{
