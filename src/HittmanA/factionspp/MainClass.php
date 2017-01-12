@@ -29,7 +29,7 @@ class MainClass extends PluginBase implements Listener {
 	}
 
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
-		$displayName = $sender->getName()
+		$displayName = $sender->getName();
 		switch ($command->getName()) {
 			case "factionspp":
 			case "fpp":
