@@ -32,9 +32,13 @@ class MainClass extends PluginBase implements Listener {
 
 	public function onJoin(PlayerJoinEvent $event) {
 		$player = $event->getPlayer();
-		$prefix = "[]";
-		$player->setDisplayName("My Rank" . $player->getName());
-		$player->setNameTag("My Rank" . $player->getName());
+		$dispName = $player->getName();
+		$fac = $this->playerInfo->$dispName->faction;
+		if(isset($fac)) {
+			$prefix = "[$fac]";
+			$player->setDisplayName($prefix . " " . $player->getName());
+			$player->setNameTag($prefix . " " . $player->getName());
+		}
 	}
 
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
@@ -73,7 +77,7 @@ class MainClass extends PluginBase implements Listener {
 						}elseif ($subcmd === "info") {
 							if(isset($this->playerInfo->$displayName)) {
 								$playerFPPProfile = $this->playerInfo->$displayName;
-								$sender->sendMessage(TextFormat::RED . "[FPP DEBUG] " . $playerFPPProfile);
+								$sender->sendMessage(TextFormat::RED . "[FPP DEBUG] " . $playerFPPProfile["faction"]);
 								$playerFac = $playerFPPProfile->faction;
 								$sender->sendMessage(TextFormat::RED . "[FPP DEBUG] " . $playerFac);
 								$playerFacInfo = $this->facs->$playerFac;
