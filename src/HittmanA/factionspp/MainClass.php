@@ -20,11 +20,11 @@ class MainClass extends PluginBase implements Listener {
 		$this->facs = new Config($this->getDataFolder() . "factions.json", Config::JSON, []);
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		$this->getServer()->getPluginManager()->registerEvents(new Events($this), $this);
-		$this->getLogger()->info(TextFormat::YELLOW . "[FactionsPP] Loaded!");
+		$this->getLogger()->info(TextFormat::YELLOW . "Loaded!");
 	}
 
 	public function onDisable() {
-		$this->getLogger()->info(TextFormat::YELLOW . "[FactionsPP] Unloading!");
+		$this->getLogger()->info(TextFormat::YELLOW . "Unloading!");
 	}
 
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
