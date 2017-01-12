@@ -12,6 +12,7 @@ use pocketmine\utils\Config;
 class MainClass extends PluginBase implements Listener {
 
     public function onEnable() {
+        @mkdir($this->getDataFolder());
         $this->saveResource("factions.json");
         $this->facs = new Config($this->getDataFolder() . "factions.json", Config::JSON);
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
