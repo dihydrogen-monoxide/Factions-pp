@@ -60,7 +60,8 @@ class MainClass extends PluginBase implements Listener {
 										"display" => $facName,
 										"leader" => $displayName,
 										"officers" => [],
-										"members" => []
+										"members" => [],
+										"power" => 5
 									]);
 									$this->playerInfo->set($displayName,[
 										"name" => $displayName,
