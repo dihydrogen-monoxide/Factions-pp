@@ -31,6 +31,7 @@ class MainClass extends PluginBase implements Listener {
 	}
 
 	public function onJoin(PlayerJoinEvent $event) {
+		$player = $event->getPlayer();
 		$prefix = "[]"
 		$player->setDisplayName("My Rank" . $player->getName());
 		$player->setNameTag("My Rank" . $player->getName());
