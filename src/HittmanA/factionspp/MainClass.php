@@ -18,6 +18,7 @@ class MainClass extends PluginBase implements Listener {
 	public function onEnable() {
 		@mkdir($this->getDataFolder());
 		$this->facs = new Config($this->getDataFolder() . "factions.json", Config::JSON, []);
+		$this->playerInfo = new Config($this->getDataFolder() . "players.json", Config::JSON, []);
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		$this->getServer()->getPluginManager()->registerEvents(new Events($this), $this);
 		$this->getLogger()->info(TextFormat::YELLOW . "Loaded!");
@@ -28,6 +29,7 @@ class MainClass extends PluginBase implements Listener {
 	}
 
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
+		$displayName = $sender->getName()
 		switch ($command->getName()) {
 			case "factionspp":
 			case "fpp":
@@ -39,11 +41,17 @@ class MainClass extends PluginBase implements Listener {
 							$this->facs->set($facName, [
 								"name" => strtolower($facName),
 								"display" => $facName,
-								"leader" => $sender->getName(),
+								"leader" => $displayName,
 								"officers" => [],
 								"members" => []
 							]);
+							$this->playerInfo->set($displayName,[
+								"name" => $displayName,
+								"faction" => $facName,
+								"role" => "Leader"
+							]);
 							$this->facs->save(true);
+							$this->playerInfo->save(true);
 							$sender->sendMessage(TextFormat::GREEN . "Faction created!");
 						}
 					} else {
