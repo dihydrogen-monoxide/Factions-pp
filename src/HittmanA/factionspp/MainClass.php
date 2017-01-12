@@ -69,7 +69,7 @@ class MainClass extends PluginBase implements Listener {
 									]);
 									$this->facs->save(true);
 									$this->playerInfo->save(true);
-									$prefix = "[$fac]";
+									$prefix = "[$facName]";
 									$sender->setDisplayName($prefix . " " . $displayName);
 									$sender->setNameTag($prefix . " " . $displayName);
 									$sender->sendMessage(TextFormat::GREEN . "Faction created!");
