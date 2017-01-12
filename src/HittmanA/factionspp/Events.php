@@ -1,7 +1,7 @@
 <?php
 
 namespace HittmanA\factionspp;
-test
+
 use pocketmine\event\Listener;
 use pocketmine\event\plugin\PluginEvent;
 
