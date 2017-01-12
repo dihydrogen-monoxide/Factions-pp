@@ -26,9 +26,9 @@ class MainClass extends PluginBase implements Listener {
     public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
         switch ($command->getName()) {
         case "factionspp":
-            $subcmd = strtolower($args[1]);
+            $subcmd = strtolower($args[0]);
             if($subcmd == "create") {
-                $cfgfac = $args[2];
+                $cfgfac = $args[1];
                 $write = array("name" => $cfgfac, "Leader" => $sender, "Officers" => array(), "Members" => array());
                 $this->facs->set($cfgfac, $write);
                 $this->$facs->save();
