@@ -51,7 +51,7 @@ class MainClass extends PluginBase implements Listener {
 				if($sender instanceof Player) {
 						if($subcmd === "create") {
 							if(isset($args[0])) {
-								if(isset($this->playerInfo->$displayName->faction)) {
+								if(isset($this->playerInfo->$displayName["faction"])) {
 									$sender->sendMessage(TextFormat::RED . "You are already in a faction!");
 								}else{
 									$facName = array_shift($args);
@@ -77,13 +77,10 @@ class MainClass extends PluginBase implements Listener {
 						}elseif ($subcmd === "info") {
 							if(isset($this->playerInfo->$displayName)) {
 								$playerFPPProfile = $this->playerInfo->$displayName;
-								$sender->sendMessage(TextFormat::RED . "[FPP DEBUG] " . $playerFPPProfile["faction"]);
-								$playerFac = $playerFPPProfile->faction;
-								$sender->sendMessage(TextFormat::RED . "[FPP DEBUG] " . $playerFac);
+								$playerFac = $playerFPPProfile["faction"];
 								$playerFacInfo = $this->facs->$playerFac;
-								$sender->sendMessage(TextFormat::RED . "[FPP DEBUG] " . $playerFacInfo);
 								$sender->sendMessage(TextFormat::GOLD . "Faction: " . $playerFac);
-								$sender->sendMessage(TextFormat::GREEN . "Your Role: " . $playerFPPProfile->role);
+								$sender->sendMessage(TextFormat::GREEN . "Your Role: " . $playerFPPProfile["role"]);
 							}else{
 								$sender->sendMessage(TextFormat::RED . "You must be part of a faction to run this command!");
 							}
