@@ -13,7 +13,6 @@ use pocketmine\utils\Config;
 
 class MainClass extends PluginBase implements Listener {
 
-<<<<<<< Updated upstream
     /** @var Config */
     protected $fac;
     //Faction name tag coming soon >:D
@@ -30,26 +29,6 @@ class MainClass extends PluginBase implements Listener {
     public function onDisable() {
         $this->getLogger()->info(TextFormat::YELLOW . "Unloading!");
     }
-=======
-	/** @var Config */
-	protected $fac;
-	//Faction name tag coming soon >:D
-	//$player->setDisplayName("My Rank" . $player->getName());
-	public function onEnable() {
-		@mkdir($this->getDataFolder());
-		$this->facs = new Config($this->getDataFolder() . "factions.json", Config::JSON, []);
-		$this->playerInfo = new Config($this->getDataFolder() . "players.json", Config::JSON, []);
-		$this->getServer()->getPluginManager()->registerEvents($this, $this);
-		$this->getServer()->getPluginManager()->registerEvents(new Events($this), $this);
-		$this->getLogger()->notice(TextFormat::YELLOW . "Loaded!");
-	}
-
-	public function onDisable() {
-		$this->facs->save(true);
-		$this->playerInfo->save(true);
-		$this->getLogger()->notice(TextFormat::YELLOW . "Unloading!");
-	}
->>>>>>> Stashed changes
 
     public function onJoin(PlayerJoinEvent $event) {
         $player = $event->getPlayer();
@@ -63,12 +42,14 @@ class MainClass extends PluginBase implements Listener {
     }
     ##$this->facs->$facWhosPowerYouWantToChange["power"] == 10;
 ##$this->facs->save(true);
+    ##$power = $this->facs->$facName[“power”];
+##$power += 10 //amount to add. Can also be a var
+##$power -= 10
 
-<<<<<<< Updated upstream
     public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
         $displayName = $sender->getName();
         $subcmd = strtolower(array_shift($args));
-        switch ($command->getName()) {
+        switch ($command->getName()){
             case "factionspp":
             case "fpp":
             case "f":
@@ -107,7 +88,9 @@ class MainClass extends PluginBase implements Listener {
                                 $sender->sendMessage(TextFormat::GOLD . "Usage: /factionspp create <name>");
                             }
                         }
-                        }elseif ($subcmd === "info") {
+                    }
+                        
+                        elseif ($subcmd === "info") {
                             if(isset($this->playerInfo->$displayName)) {
                                 $playerFPPProfile = $this->playerInfo->$displayName;
                                 $playerFac = $playerFPPProfile["faction"];
@@ -117,97 +100,35 @@ class MainClass extends PluginBase implements Listener {
                             }else{
                                 $sender->sendMessage(TextFormat::RED . "You must be part of a faction to run this command!");
                             }
+                        }elseif ($subcmd === "leave" || $subcmd === "quit") {
+                            if(isset($this->playerInfo->$displayName)) {
+                                $playerFPPProfile = $this->playerInfo->$displayName;
+                                $playerFac = $playerFPPProfile["faction"];
+                                $playerFacInfo = $this->facs->$playerFac;
+                                if(empty($playerFacInfo["officers"]) || empty($playerFacInfo["members"])) {
+                                    $this->facs->remove($playerFac);
+                                    $this->facs->$playerFac["faction"] = " ";
+                                    $this->facs->$playerFac["role"] = " ";
+                                    $sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
+                                }else{
+                                    if($playerFPPProfile["role"]) {
+                                        $this->facs->$playerFac[$playerFPPProfile["rank"] . "s"]->remove($displayName);
+                                        $this->facs->$playerFac["faction"] = " ";
+                                        $this->facs->$playerFac["role"] = " ";
+                                        $sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
+                                    }else{
+                                        $sender->sendMessage(TextFormat::RED . "You must make another player leader first!");
+                                    }
+                                }
+                            }else{
+                                $sender->sendMessage(TextFormat::RED . "You must be part of a faction to run this command!");
+                            }
                         }
                 } else {
                     $sender->sendMessage(TextFormat::RED . "Please run this command in-game");
                 }
-                return true;
-            default:
-                return false;
-        }
-    }
-
-=======
-	public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
-		$displayName = $sender->getName();
-		$subcmd = strtolower(array_shift($args));
-		switch ($command->getName()) {
-			case "factionspp":
-			case "fpp":
-			case "f":
-				if($sender instanceof Player) {
-						if($subcmd === "create") {
-							if(isset($args[0])) {
-								if(isset($this->playerInfo->$displayName["faction"])) {
-									$sender->sendMessage(TextFormat::RED . "You are already in a faction!");
-								}else{
-									$facName = array_shift($args);
-									$this->facs->set($facName, [
-										"name" => $facName,
-										"display" => $facName,
-										"leader" => $displayName,
-										"officers" => [],
-										"members" => [],
-										"power" => 5
-									]);
-									$this->playerInfo->set($displayName,[
-										"name" => $displayName,
-										"faction" => $facName,
-										"role" => "Leader"
-									]);
-									$this->facs->save(true);
-									$this->playerInfo->save(true);
-									$prefix = "[".$facName."]";
-									$sender->setDisplayName($prefix . " " . $displayName);
-									$sender->setNameTag($prefix . " " . $displayName);
-									$sender->sendMessage(TextFormat::GREEN . "Faction created!");
-								}
-							} else {
-								$sender->sendMessage(TextFormat::GOLD . "Usage: /factionspp create <name>");
-							}
-						}elseif ($subcmd === "info") {
-							if(isset($this->playerInfo->$displayName)) {
-								$playerFPPProfile = $this->playerInfo->$displayName;
-								$playerFac = $playerFPPProfile["faction"];
-								$playerFacInfo = $this->facs->$playerFac;
-								$sender->sendMessage(TextFormat::GOLD . "Faction: " . $playerFac);
-								$sender->sendMessage(TextFormat::GREEN . "Your Role: " . $playerFPPProfile["role"]);
-							}else{
-								$sender->sendMessage(TextFormat::RED . "You must be part of a faction to run this command!");
-							}
-						}elseif ($subcmd === "leave" || $subcmd === "quit") {
-							if(isset($this->playerInfo->$displayName)) {
-								$playerFPPProfile = $this->playerInfo->$displayName;
-								$playerFac = $playerFPPProfile["faction"];
-								$playerFacInfo = $this->facs->$playerFac;
-								if(empty($playerFacInfo["officers"]) || empty($playerFacInfo["members"])) {
-									$this->facs->remove($playerFac);
-									$this->facs->$playerFac["faction"] = "";
-									$this->facs->$playerFac["role"] = "";
-									$sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
-								}else{
-									if($playerFPPProfile["role"]) {
-										$this->facs->$playerFac[$playerFPPProfile["rank"] . "s"]->remove($displayName);
-										$this->facs->$playerFac["faction"] = "";
-										$this->facs->$playerFac["role"] = "";
-										$sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
-									}else{
-										$sender->sendMessage(TextFormat::RED . "You must make another player leader first!");
-									}
-								}
-							}else{
-								$sender->sendMessage(TextFormat::RED . "You must be part of a faction to run this command!");
-							}
-						}
-				} else {
-					$sender->sendMessage(TextFormat::RED . "Please run this command in-game");
-				}
-				return true;
-			default:
-				return false;
-		}
-	}
-	$this->facs->save(true);
-	$this->playerInfo->save(true);
->>>>>>> Stashed changes
+            }
+    $this->facs->save(true);
+    $this->playerInfo->save(true);
+}
 }
