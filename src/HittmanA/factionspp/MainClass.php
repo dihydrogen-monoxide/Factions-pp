@@ -123,6 +123,8 @@ class MainClass extends PluginBase implements Listener {
                                 $sender->sendMessage(TextFormat::RED . "You must be part of a faction to run this command!");
                             }
                         }
+                        $this->facs->save(true);
+                        $this->playerInfo->save(true);
                 } else {
                     $sender->sendMessage(TextFormat::RED . "Please run this command in-game");
                 }
