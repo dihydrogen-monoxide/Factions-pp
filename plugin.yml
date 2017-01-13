@@ -1,5 +1,5 @@
 main: HittmanA\factionspp\MainClass
-api: 3.0.0-ALPHA2
+api: [3.0.0-ALPHA1, 3.0.0-ALPHA2]
 
 name: FactionsPP
 description: A factions plugin
