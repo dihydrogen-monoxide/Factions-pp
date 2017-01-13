@@ -29,7 +29,8 @@ class MainClass extends PluginBase implements Listener {
     public function onDisable() {
         $this->getLogger()->info(TextFormat::YELLOW . "Unloading!");
     }
-
+    //Was going to use this but first I need to make PureChatReloaded
+/*
     public function onJoin(PlayerJoinEvent $event) {
         $player = $event->getPlayer();
         $dispName = $player->getName();
@@ -40,6 +41,7 @@ class MainClass extends PluginBase implements Listener {
             $player->setNameTag($prefix . " " . $player->getName());
         }
     }
+    */
     ##$this->facs->$facWhosPowerYouWantToChange["power"] == 10;
 ##$this->facs->save(true);
     ##$power = $this->facs->$facName[“power”];
@@ -107,14 +109,14 @@ class MainClass extends PluginBase implements Listener {
                                 $playerFacInfo = $this->facs->$playerFac;
                                 if(empty($playerFacInfo["officers"]) || empty($playerFacInfo["members"])) {
                                     $this->facs->remove($playerFac);
-                                    $this->playerInfo->$displayName["faction"] = "";
-                                    $this->playerInfo->$displayName["role"] = "";
+                                    $playerFPPProfile["faction"] = "";
+                                    $playerFPPProfile["role"] = "";
                                     $sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
                                 }else{
                                     if($playerFPPProfile["role"]) {
                                         $this->facs->$playerFac[$playerFPPProfile["role"] . "s"]->remove($displayName);
-                                        $this->playerInfo->$displayName["faction"] = " ";
-                                        $this->playerInfo->$displayName["role"] = " ";
+                                        $playerFPPProfile["faction"] = "";
+                                        $playerFPPProfile["role"] = "";
                                         $sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
                                     }else{
                                         $sender->sendMessage(TextFormat::RED . "You must make another player leader first!");
