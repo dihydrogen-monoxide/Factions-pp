@@ -15,8 +15,7 @@ class MainClass extends PluginBase implements Listener {
 
     /** @var Config */
     protected $fac;
-    //Faction name tag coming soon >:D
-    //$player->setDisplayName("My Rank" . $player->getName());
+
     public function onEnable() {
         @mkdir($this->getDataFolder());
         $this->facs = new Config($this->getDataFolder() . "factions.json", Config::JSON, []);
@@ -109,14 +108,14 @@ class MainClass extends PluginBase implements Listener {
                                 $playerFacInfo = $this->facs->$playerFac;
                                 if(empty($playerFacInfo["officers"]) || empty($playerFacInfo["members"])) {
                                     $this->facs->remove($playerFac);
-                                    $playerFPPProfile["faction"] = "";
-                                    $playerFPPProfile["role"] = "";
+                                    $playerFPPProfile->set("faction","");
+                                    $playerFPPProfile->set("role","");
                                     $sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
                                 }else{
-                                    if($playerFPPProfile["role"]) {
+                                    if($playerFPPProfile["role"] === "Leader") {
                                         $this->facs->$playerFac[$playerFPPProfile["role"] . "s"]->remove($displayName);
-                                        $playerFPPProfile["faction"] = "";
-                                        $playerFPPProfile["role"] = "";
+                                        $playerFPPProfile->set("faction","");
+                                        $playerFPPProfile->set("role","");
                                         $sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
                                     }else{
                                         $sender->sendMessage(TextFormat::RED . "You must make another player leader first!");
