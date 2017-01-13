@@ -108,14 +108,14 @@ class MainClass extends PluginBase implements Listener {
                                 $playerFacInfo = $this->facs->$playerFac;
                                 if(empty($playerFacInfo["officers"]) || empty($playerFacInfo["members"])) {
                                     $this->facs->remove($playerFac);
-                                    $this->playerInfo->$displayName->set("faction","");
-                                    $this->playerInfo->$displayName->set("role","");
+                                    $this->playerInfo->setNested($displayName, ["faction" => ""]);
+                                    $this->playerInfo->setNested($displayName, ["role" => ""]);
                                     $sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
                                 }else{
                                     if($playerFPPProfile["role"] === "Leader") {
                                         $this->facs->$playerFac[$playerFPPProfile["role"] . "s"]->remove($displayName);
-                                        $this->playerInfo->$displayName->set("faction","");
-                                        $this->playerInfo->$displayName->set("role","");
+                                        $this->playerInfo->setNested($displayName, ["faction" => ""]);
+                                        $this->playerInfo->setNested($displayName, ["role" => ""]); 
                                         $sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
                                     }else{
                                         $sender->sendMessage(TextFormat::RED . "You must make another player leader first!");
