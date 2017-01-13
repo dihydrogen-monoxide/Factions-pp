@@ -107,8 +107,8 @@ class MainClass extends PluginBase implements Listener {
                                 $playerFacInfo = $this->facs->$playerFac;
                                 if(empty($playerFacInfo["officers"]) || empty($playerFacInfo["members"])) {
                                     $this->facs->remove($playerFac);
-                                    $this->playerInfo->$playerFac["faction"] = " ";
-                                    $this->playerInfo->$playerFac["role"] = " ";
+                                    $this->playerInfo->$displayName["faction"] = "";
+                                    $this->playerInfo->$displayName["role"] = "";
                                     $sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
                                 }else{
                                     if($playerFPPProfile["role"]) {
