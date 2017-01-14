@@ -13,11 +13,13 @@ use pocketmine\utils\Config;
 
 class MainClass extends PluginBase implements Listener {
 
+    /** @var Config */
     protected $fac;
 
     public function onEnable() {
-        @mkdir($this->getDataFolder());
+        //Make the faction config
         $this->facs = new Config($this->getDataFolder() . "factions.json", Config::JSON, []);
+        //Make the player info config
         $this->playerInfo = new Config($this->getDataFolder() . "players.json", Config::JSON, []);
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->getServer()->getPluginManager()->registerEvents(new Events($this), $this);
@@ -47,19 +49,29 @@ class MainClass extends PluginBase implements Listener {
 ##$power -= 10
 
     public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
+      //Player's display name
         $displayName = $sender->getName();
+        //Check if player is already registered in the config. If so set some helpful vars.
         if(isset($this->playerInfo->$displayName)){
+          //Players info from the config.
           $playerFPPProfile = $this->playerInfo->$displayName;
+          //Players faction from the config.
           $playerFac = $playerFPPProfile["faction"];
+          //Players role in the faction.
           $playerRole = $playerFPPProfile["role"];
+          //Get the information about the players faction from the faction config.
           $playerFacInfo = $this->facs->$playerFac;
+          //Player exists in player config.
           $playerRegistered = true;
+          //If player's faction is set...
           if($playerFac !== ""){
+            //Player has a faction.
             $playerHasFac = true;
           }
         }
-
+        //The subcommand of the command
         $subcmd = strtolower(array_shift($args));
+        //Is the actual command factionspp, fpp, or f?
         switch ($command->getName()){
             case "factionspp":
             case "fpp":
