@@ -1,0 +1,19 @@
+main: HittmanA\factionspp\MainClass
+api: [3.0.0-ALPHA1, 3.0.0-ALPHA2]
+
+name: FactionsPP
+description: A factions plugin
+version: 0.0.1
+author: HittmanA
+
+commands:
+  factionspp:
+    description: Main FactionsPP command
+    usage: "/factionspp"
+    aliases: [f, fpp]
+    permission: fpp.cmd
+
+permissions:
+ fpp:
+  default: op
+  description: "allow players to use the main factionspp command"
