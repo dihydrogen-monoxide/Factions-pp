@@ -13,7 +13,6 @@ use pocketmine\utils\Config;
 
 class MainClass extends PluginBase implements Listener {
 
-    /** @var Config */
     protected $fac;
 
     public function onEnable() {
@@ -59,7 +58,7 @@ class MainClass extends PluginBase implements Listener {
             $playerHasFac = true;
           }
         }
-        if($playerRegistered === true)
+
         $subcmd = strtolower(array_shift($args));
         switch ($command->getName()){
             case "factionspp":
@@ -99,17 +98,14 @@ class MainClass extends PluginBase implements Listener {
                             } else {
                                 $sender->sendMessage(TextFormat::GOLD . "Usage: /factionspp create <name>");
                             }
-                        }
-                    }
-
-                        elseif ($subcmd === "info") {
+                    } elseif ($subcmd === "info") {
                             if($playerRegistered === true && $playerHasFac) {
                                 $sender->sendMessage(TextFormat::GOLD . "Faction: " . $playerFac);
                                 $sender->sendMessage(TextFormat::GREEN . "Your Role: " . $playerFPPProfile["role"]);
                             }else{
                                 $sender->sendMessage(TextFormat::RED . "You must be part of a faction to run this command!");
                             }
-                        }elseif ($subcmd === "leave" || $subcmd === "quit") {
+                        } elseif ($subcmd === "leave" || $subcmd === "quit") {
                             if($playerRegistered === true && $playerHasFac) {
                                 if(empty($playerFacInfo["officers"]) || empty($playerFacInfo["members"])) {
                                     $this->facs->remove($playerFac);
@@ -130,9 +126,9 @@ class MainClass extends PluginBase implements Listener {
                         }
                         $this->facs->save(true);
                         $this->playerInfo->save(true);
-                } else {
-                    $sender->sendMessage(TextFormat::RED . "Please run this command in-game");
+                      } else {
+                          $sender->sendMessage(TextFormat::RED . "Please run this command in-game");
+                      }
                 }
             }
-          }
-}
+      }

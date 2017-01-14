@@ -13,5 +13,6 @@ A Yaml version is coming soon, (more storage, more features)
 - [ ] Add Format choice and async loading/saving
 - [ ] Add `/f join <fac>` command
 - [ ] Add `/f invite <player>` command
+- [ ] Separate out commands
 - [ ] Bug fixes (always)
 - [ ] Better Performance
