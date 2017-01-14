@@ -76,13 +76,20 @@ class MainClass extends PluginBase implements Listener {
             case "factionspp":
             case "fpp":
             case "f":
+            //Is the command sender a player?
                 if($sender instanceof Player) {
+                  //Is the subcommand create?
                         if($subcmd === "create") {
+                          //Is the faction name included? E.G. /f create <faction name>
                             if(isset($args[0])) {
+                              //Name of the <faction name>
                                 $facName = array_shift($args);
+                                //Does the player have a fac...
                                 if($playerHasFac) {
+                                  //THEN WHY DO YOU NEED TO MAKE ANOTHER ONE?!
                                     $sender->sendMessage(TextFormat::RED . "You are already in a faction!");
                                 }else{
+                                  //Does 
                                     if(!isset($this->facs->$facName)){
                                     $this->facs->set($facName, [
                                         "name" => strtolower($facName),
