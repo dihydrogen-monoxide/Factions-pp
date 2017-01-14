@@ -11,6 +11,10 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Config;
 
+function __autoload($class_name) {
+  require_once $class_name . '.php';
+}
+
 class MainClass extends PluginBase implements Listener {
 
     /** @var Config */

@@ -3,7 +3,7 @@ api: [3.0.0-ALPHA1, 3.0.0-ALPHA2]
 
 name: FactionsPP
 description: A factions plugin
-version: 0.0.1
+version: 0.5
 author: HittmanA
 
 commands:
