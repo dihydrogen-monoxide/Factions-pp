@@ -80,7 +80,7 @@ class MainClass extends PluginBase implements Listener {
                 if($sender instanceof Player) {
                   //Is the subcommand create?
                         if($subcmd === "create") {
-                          //Is the faction name included? E.G. /f create <faction name>
+                          //Is the faction name included? E.G. /f create <faction name>...
                             if(isset($args[0])) {
                               //Name of the <faction name>
                                 $facName = array_shift($args);
@@ -115,6 +115,7 @@ class MainClass extends PluginBase implements Listener {
                                       $sender->setDisplayName($prefix . " " . $displayName);
                                       $sender->setNameTag($prefix . " " . $displayName);
                                       */
+                                      //Success!
                                       $sender->sendMessage(TextFormat::GREEN . "Faction created!");
                                     }else{
                                       //Otherwise, WHY ARE YOU TRYING TO STEAL THAT FACTION NAME?!
@@ -122,6 +123,7 @@ class MainClass extends PluginBase implements Listener {
                                 }
                               }
                             } else {
+                              //Or did you forget to specify a name?
                                 $sender->sendMessage(TextFormat::GOLD . "Usage: /factionspp create <name>");
                             }
                     } elseif ($subcmd === "info") {
