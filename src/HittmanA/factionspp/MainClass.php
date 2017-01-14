@@ -89,29 +89,36 @@ class MainClass extends PluginBase implements Listener {
                                   //THEN WHY DO YOU NEED TO MAKE ANOTHER ONE?!
                                     $sender->sendMessage(TextFormat::RED . "You are already in a faction!");
                                 }else{
-                                  //Does 
+                                  //Does this faction exist...
                                     if(!isset($this->facs->$facName)){
-                                    $this->facs->set($facName, [
-                                        "name" => strtolower($facName),
-                                        "display" => $facName,
-                                        "leader" => $displayName,
-                                        "officers" => [],
-                                        "members" => [],
-                                        "power" => 5
-                                    ]);
-                                    $this->playerInfo->set($displayName,[
-                                        "name" => $displayName,
-                                        "faction" => $facName,
-                                        "role" => "Leader"
-                                    ]);
-                                    $this->facs->save(true);
-                                    $this->playerInfo->save(true);
-                                    $prefix = "[".$facName."]";
-                                    $sender->setDisplayName($prefix . " " . $displayName);
-                                    $sender->setNameTag($prefix . " " . $displayName);
-                                    $sender->sendMessage(TextFormat::GREEN . "Faction created!");
-                                }else{
-                                  $sender->sendMessage(TextFormat::RED . "That faction already exists!");
+                                      //If not then create a new faction in the config.
+                                      $this->facs->set($facName, [
+                                          "name" => strtolower($facName),
+                                          "display" => $facName,
+                                          "leader" => $displayName,
+                                          "officers" => [],
+                                          "members" => [],
+                                          "power" => 5
+                                      ]);
+                                      //And make a new player profile in the player config.
+                                      $this->playerInfo->set($displayName,[
+                                          "name" => $displayName,
+                                          "faction" => $facName,
+                                          "role" => "Leader"
+                                      ]);
+                                      //Save the faction config.
+                                      $this->facs->save(true);
+                                      //And the player info.
+                                      $this->playerInfo->save(true);
+                                      /*
+                                      $prefix = "[".$facName."]";
+                                      $sender->setDisplayName($prefix . " " . $displayName);
+                                      $sender->setNameTag($prefix . " " . $displayName);
+                                      */
+                                      $sender->sendMessage(TextFormat::GREEN . "Faction created!");
+                                    }else{
+                                      //Otherwise, WHY ARE YOU TRYING TO STEAL THAT FACTION NAME?!
+                                      $sender->sendMessage(TextFormat::RED . "That faction already exists!");
                                 }
                               }
                             } else {
