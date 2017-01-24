@@ -1,18 +1,14 @@
 # Factions-pp
+__* A factions plugin. (PP = ++) *__
 
 [![Poggit-CI](https://poggit.pmmp.io/ci.badge/dihydrogen-monoxide/Factions-pp/Factions-pp)](https://poggit.pmmp.io/ci/dihydrogen-monoxide/Factions-pp/Factions-pp)
 
-Any PRS are *greatly* appreciated!
+__Any contributions are *greatly* appreciated!__
 
-#THIS IS A MAJOR WIP. NOT READY FOR USE.
-A factions plugin. (PP = ++)
-A Yaml version is coming soon, (more storage, more features)
+# *THIS IS A MAJOR WIP. NOT READY FOR PRODUCTION.*
 
 # TODO:
-
-- [ ] Add Format choice and async loading/saving
-- [ ] Add `/f join <fac>` command
-- [ ] Add `/f invite <player>` command
-- [ ] Separate out commands
-- [ ] Bug fixes (always)
-- [ ] Better Performance
+- [ ] Add proper provider implementation (see https://github.com/dihydrogen-monoxide/Factions-pp/issues/8)
+- [ ] Basic faction functionallity
+- [ ] All basic factions commands
+- [ ] Squash all da bugs
