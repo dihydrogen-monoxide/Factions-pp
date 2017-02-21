@@ -18,9 +18,12 @@ class MainClass extends PluginBase implements Listener {
 
     public function onEnable() {
         //Make the faction config
+      @mkdir($this->getDataFolder());
         $this->facs = new Config($this->getDataFolder() . "factions.json", Config::JSON, []);
         //Make the player info config
         $this->playerInfo = new Config($this->getDataFolder() . "players.json", Config::JSON, []);
+        //Now the claims
+        $this->claims = new Config($this->getDataFolder() . "claims.json", Config::JSON, []);
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->getServer()->getPluginManager()->registerEvents(new Events($this), $this);
         $this->getLogger()->info(TextFormat::YELLOW . "Loaded!");
@@ -48,6 +51,11 @@ class MainClass extends PluginBase implements Listener {
 ##$power += 10 //amount to add. Can also be a var
 ##$power -= 10
 
+        //Checks if the player is in a faction claim
+    public function isInClaim($p) {
+
+    }
+
     public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
       //Player's display name
         $displayName = $sender->getName();
@@ -61,6 +69,12 @@ class MainClass extends PluginBase implements Listener {
           $playerRole = $playerFPPProfile["role"];
           //Get the information about the players faction from the faction config.
           $playerFacInfo = $this->facs->$playerFac;
+          //Faction power
+          $x = $playerFacInfo["claimx"];
+          $z = $playerFacInfo["claimz"];
+          $x2 = $playerFacInfo["claimx"];
+          $z2 = $playerFacInfo["claimz"];
+          //Claim var's, not sure yet...
           //Player exists in player config.
           $playerRegistered = true;
           //If player's faction is set...
@@ -69,6 +83,7 @@ class MainClass extends PluginBase implements Listener {
             $playerHasFac = true;
           }
         }
+    
         //The subcommand of the command
         $subcmd = strtolower(array_shift($args));
         //Is the actual command factionspp, fpp, or f?
@@ -98,7 +113,11 @@ class MainClass extends PluginBase implements Listener {
                                           "leader" => $displayName,
                                           "officers" => [],
                                           "members" => [],
-                                          "power" => 5
+                                          "power" => 5,
+                                          "claimx" => $sender->getX() + 9,
+                                          "claimz" => $sender->getZ() + 9,
+                                          "claimx2" => $sender->getX() - 9,
+                                          "claimz2" => $sender->getZ() - 9
                                       ]);
                                       //And make a new player profile in the player config.
                                       $this->playerInfo->set($displayName,[
@@ -128,23 +147,40 @@ class MainClass extends PluginBase implements Listener {
                             }
                     } elseif ($subcmd === "info") {
                             if($playerRegistered === true && $playerHasFac) {
+
                                 $sender->sendMessage(TextFormat::GOLD . "Faction: " . $playerFac);
                                 $sender->sendMessage(TextFormat::GREEN . "Your Role: " . $playerFPPProfile["role"]);
+                                $sender->sendMessage(TextFormat::GREEN . "Faction Power: " . $power);
+                            }else{
+                                $sender->sendMessage(TextFormat::RED . "You must be part of a faction to run this command!");
+                            }
+                        }
+                    } elseif ($subcmd === "claim") {
+                            if($playerRegistered === true && $playerHasFac) {
+
+                                $sender->sendMessage(TextFormat::GOLD . "Faction: " . $playerFac);
+                                $sender->sendMessage(TextFormat::GREEN . "Your Role: " . $playerFPPProfile["role"]);
+                                $sender->sendMessage(TextFormat::GREEN . "Faction Power: " . $power);
                             }else{
                                 $sender->sendMessage(TextFormat::RED . "You must be part of a faction to run this command!");
                             }
                         } elseif ($subcmd === "leave" || $subcmd === "quit") {
                             if($playerRegistered === true && $playerHasFac) {
-                                if(empty($playerFacInfo["officers"]) || empty($playerFacInfo["members"])) {
+                                if(empty($playerFacInfo["officers"]) && empty($playerFacInfo["members"])) {
                                     $this->facs->remove($playerFac);
                                     $this->playerInfo->setNested($displayName, ["name" => $displayName,"faction" => "","role" => ""]);
                                     $sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
-                                }else{
+                                  }
+                                }
+                              else{
                                     if($playerRole !== "Leader") {
                                         $this->facs->$playerFac[$playerRole . "s"]->remove($displayName);
                                         $this->playerInfo->setNested($displayName, ["name" => $displayName,"faction" => "","role" => ""]);
                                         $sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
-                                    }else{
+                                    }
+                                  
+
+                                else{
                                         $sender->sendMessage(TextFormat::RED . "You must make another player leader first!");
                                     }
                                 }
@@ -154,9 +190,5 @@ class MainClass extends PluginBase implements Listener {
                         }
                         $this->facs->save(true);
                         $this->playerInfo->save(true);
-                      } else {
-                          $sender->sendMessage(TextFormat::RED . "Please run this command in-game");
-                      }
-                }
-            }
-      }
+                      }                
+                    }
