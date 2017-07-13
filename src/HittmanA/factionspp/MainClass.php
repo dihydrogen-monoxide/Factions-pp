@@ -1,7 +1,5 @@
 <?php
-
 namespace HittmanA\factionspp;
-
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
@@ -10,12 +8,9 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Config;
-
 class MainClass extends PluginBase implements Listener {
-
     /** @var Config */
     protected $fac;
-
     public function onEnable() {
         //Make the faction config
       @mkdir($this->getDataFolder());
@@ -28,12 +23,11 @@ class MainClass extends PluginBase implements Listener {
         $this->getServer()->getPluginManager()->registerEvents(new Events($this), $this);
         $this->getLogger()->info(TextFormat::YELLOW . "Loaded!");
     }
-
     public function onDisable() {
         $this->getLogger()->info(TextFormat::YELLOW . "Unloading!");
     }
     //Was going to use this but first I need to make PureChatReloaded
-/*
+    /*
     public function onJoin(PlayerJoinEvent $event) {
         $player = $event->getPlayer();
         $dispName = $player->getName();
@@ -46,19 +40,20 @@ class MainClass extends PluginBase implements Listener {
     }
     */
     ##$this->facs->$facWhosPowerYouWantToChange["power"] == 10;
-##$this->facs->save(true);
+    ##$this->facs->save(true);
     ##$power = $this->facs->$facName[“power”];
-##$power += 10 //amount to add. Can also be a var
-##$power -= 10
-
-        //Checks if the player is in a faction claim
+    ##$power += 10 //amount to add. Can also be a var
+    ##$power -= 10
+    //Checks if the player is in a faction claim
     public function isInClaim($p) {
-
+      
     }
-
     public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
       //Player's display name
         $displayName = $sender->getName();
+        $playerHasFac = false;
+        $playerRegistered = false;
+        $power = 0;
         //Check if player is already registered in the config. If so set some helpful vars.
         if(isset($this->playerInfo->$displayName)){
           //Players info from the config.
@@ -70,6 +65,7 @@ class MainClass extends PluginBase implements Listener {
           //Get the information about the players faction from the faction config.
           $playerFacInfo = $this->facs->$playerFac;
           //Faction power
+          $power = $playerFacInfo["power"];
           $x = $playerFacInfo["claimx"];
           $z = $playerFacInfo["claimz"];
           $x2 = $playerFacInfo["claimx"];
@@ -136,59 +132,64 @@ class MainClass extends PluginBase implements Listener {
                                       */
                                       //Success!
                                       $sender->sendMessage(TextFormat::GREEN . "Faction created!");
+                                      return true;
                                     }else{
                                       //Otherwise, WHY ARE YOU TRYING TO STEAL THAT FACTION NAME?!
                                       $sender->sendMessage(TextFormat::RED . "That faction already exists!");
+                                      return true;
                                 }
                               }
                             } else {
                               //Or did you forget to specify a name?
                                 $sender->sendMessage(TextFormat::GOLD . "Usage: /factionspp create <name>");
+                                return true;
                             }
                     } elseif ($subcmd === "info") {
                             if($playerRegistered === true && $playerHasFac) {
-
                                 $sender->sendMessage(TextFormat::GOLD . "Faction: " . $playerFac);
                                 $sender->sendMessage(TextFormat::GREEN . "Your Role: " . $playerFPPProfile["role"]);
                                 $sender->sendMessage(TextFormat::GREEN . "Faction Power: " . $power);
+                                return true;
                             }else{
                                 $sender->sendMessage(TextFormat::RED . "You must be part of a faction to run this command!");
+                                return true;
                             }
-                        }
                     } elseif ($subcmd === "claim") {
                             if($playerRegistered === true && $playerHasFac) {
-
                                 $sender->sendMessage(TextFormat::GOLD . "Faction: " . $playerFac);
                                 $sender->sendMessage(TextFormat::GREEN . "Your Role: " . $playerFPPProfile["role"]);
                                 $sender->sendMessage(TextFormat::GREEN . "Faction Power: " . $power);
+                                return true;
                             }else{
                                 $sender->sendMessage(TextFormat::RED . "You must be part of a faction to run this command!");
+                                return true;
                             }
-                        } elseif ($subcmd === "leave" || $subcmd === "quit") {
+                    } elseif ($subcmd === "leave" || $subcmd === "quit") {
                             if($playerRegistered === true && $playerHasFac) {
                                 if(empty($playerFacInfo["officers"]) && empty($playerFacInfo["members"])) {
                                     $this->facs->remove($playerFac);
                                     $this->playerInfo->setNested($displayName, ["name" => $displayName,"faction" => "","role" => ""]);
                                     $sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
+                                    return true;
                                   }
-                                }
-                              else{
+                                } else {
                                     if($playerRole !== "Leader") {
                                         $this->facs->$playerFac[$playerRole . "s"]->remove($displayName);
                                         $this->playerInfo->setNested($displayName, ["name" => $displayName,"faction" => "","role" => ""]);
                                         $sender->sendMessage(TextFormat::GREEN . "You have left the faction!");
-                                    }
-                                  
-
-                                else{
+                                        return true;
+                                    } else {
                                         $sender->sendMessage(TextFormat::RED . "You must make another player leader first!");
+                                        return true;
                                     }
                                 }
                             }else{
                                 $sender->sendMessage(TextFormat::RED . "You must be part of a faction to run this command!");
+                                return true;
                             }
                         }
                         $this->facs->save(true);
                         $this->playerInfo->save(true);
-                      }                
+                      }             
                     }
+}
