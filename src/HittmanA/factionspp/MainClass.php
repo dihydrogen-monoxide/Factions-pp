@@ -11,8 +11,6 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Config;
 
-use onebone\economyapi\EconomyAPI;
-
 use HittmanA\factionspp\command\CreateFaction;
 
 class MainClass extends PluginBase implements Listener {
@@ -21,10 +19,8 @@ class MainClass extends PluginBase implements Listener {
     
     protected $economyPlugin = "";
     
-    protected $playerInfo;
-    
-    protected $playerFacInfo;
-    
+    protected $economyPluginInstance = "";
+
     protected $invites = [];
     
     public function onEnable() {
@@ -40,13 +36,15 @@ class MainClass extends PluginBase implements Listener {
         
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->getServer()->getPluginManager()->registerEvents(new Events($this), $this);
-        
-        if(EconomyAPI::getInstance() != null || EconomyAPI::getInstance() != "")
+
+        if($this->getServer()->getPluginManager()->getPlugin('EconomyAPI')::getInstance())
         {
+          $economyPluginInstance = $this->getServer()->getPluginManager()->getPlugin('EconomyAPI')::getInstance();
           $economyPlugin = "EconomyS";
           $this->getLogger()->info(TextFormat::YELLOW . "EconomyAPI enabled. Using EconomyS as economy plugin");
         } else {
-          $economyPlugin = "NONE";
+          $economyPluginInstance = null;
+          $economyPlugin = null;
           $this->getLogger()->info(TextFormat::RED . "No economy plugin :( FactionsPP is much better with an economy plugin.");
         }
         
@@ -88,8 +86,11 @@ class MainClass extends PluginBase implements Listener {
         $playerHasFac = false;
         $playerRegistered = false;
         $power = 0;
+        $playerFacInfo = "";
+        $playerFPPProfile = "";
         //Check if player is already registered in the config. If so set some helpful vars.
         if(isset($this->playerInfo->$displayName)){
+          print($this->playerInfo->$displayName);
           //Players info from the config.
           $playerFPPProfile = $this->playerInfo->$displayName;
           //Players faction from the config.
@@ -131,7 +132,7 @@ class MainClass extends PluginBase implements Listener {
                   return true;
                 } else {
                   $create = new CreateFaction($playerFacInfo, $playerFPPProfile, $command, $sender);
-                  $create->Run();
+                  $create->execute();
                 }
               } else {
                 $sender->sendMessage(TextFormat::RED . "You must specify a faction name. Example: /f create Example");

@@ -8,27 +8,28 @@ use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Config;
 
-use onebone\economyapi\EconomyAPI;
-
 class CreateFaction
 {
     
-    public function __construct($factionInfo, $playerFactionInfo, $command, $sender)
+    public function __construct($factionInfo, $playerFactionInfo, Command $command, CommandSender $sender)
     {
         $this->faction = $factionInfo;
         $this->player = $playerFactionInfo;
         $this->command = $command;
         $this->sender = $sender;
-        $this->setPermission("fpp.command.create");
     }
     
-    public function Run()
+    public function execute()
     {
-        if(!$this->testPermission($sender)){
-			return false;
+        
+        if(!$this->sender->hasPermission("fpp.command.create")){
+            
+			return true;
+		} else {
+		    
+		    $this->sender->sendMessage(TextFormat::GREEN . "Worked!");
+		    
 		}
-		
-		$sender->sendMessage(TextFormat::GREEN . "Worked!");
 		
     }
     
