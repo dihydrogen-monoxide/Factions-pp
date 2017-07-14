@@ -9,11 +9,20 @@ author: HittmanA
 commands:
   factionspp:
     description: Main FactionsPP command
-    usage: "/factionspp"
+    usage: "/factionspp <subcommand>"
     aliases: [f, fpp]
     permission: fpp
 
 permissions:
  fpp:
   default: true
-  description: "allow players to use the main factionspp command"
+  description: Allows to control of FPP
+  children:
+    fpp.command.*:
+        default: true
+        description: Allows use of all FPP commands
+        children:
+            fpp.command.create:
+                default: true
+                dexcription: Allows users to create new factions
+        
