@@ -12,6 +12,7 @@ use pocketmine\utils\TextFormat;
 use pocketmine\utils\Config;
 
 use HittmanA\factionspp\command\CreateFaction;
+use HittmanA\factionspp\Provider;
 
 class MainClass extends PluginBase implements Listener {
     /** @var Config */
@@ -26,20 +27,22 @@ class MainClass extends PluginBase implements Listener {
     public function onEnable() {
         //Make the faction config
         @mkdir($this->getDataFolder());
+        $this->saveDefaultConfig();
+        /*
         $this->facs = new Config($this->getDataFolder() . "factions.json", Config::JSON, []);
         
         //Make the player info config
         $this->playerInfo = new Config($this->getDataFolder() . "players.json", Config::JSON, []);
         
         //Now the claims
-        $this->claims = new Config($this->getDataFolder() . "claims.json", Config::JSON, []);
+        $this->claims = new Config($this->getDataFolder() . "claims.json", Config::JSON, []);*/
         
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->getServer()->getPluginManager()->registerEvents(new Events($this), $this);
 
-        if($this->getServer()->getPluginManager()->getPlugin('EconomyAPI')::getInstance())
+        if($this->getServer()->getPluginManager()->getPlugin('EconomyAPI')->getInstance())
         {
-          $economyPluginInstance = $this->getServer()->getPluginManager()->getPlugin('EconomyAPI')::getInstance();
+          $economyPluginInstance = $this->getServer()->getPluginManager()->getPlugin('EconomyAPI')->getInstance();
           $economyPlugin = "EconomyS";
           $this->getLogger()->info(TextFormat::YELLOW . "EconomyAPI enabled. Using EconomyS as economy plugin");
         } else {
@@ -47,6 +50,8 @@ class MainClass extends PluginBase implements Listener {
           $economyPlugin = null;
           $this->getLogger()->info(TextFormat::RED . "No economy plugin :( FactionsPP is much better with an economy plugin.");
         }
+        
+        $this->provider = new Provider($this);
         
         $this->getLogger()->info(TextFormat::YELLOW . "Loaded!");
     }
@@ -131,7 +136,7 @@ class MainClass extends PluginBase implements Listener {
                   $sender->sendMessage(TextFormat::RED . "You are already in a faction! You must leave your faction to create a new one.");
                   return true;
                 } else {
-                  $create = new CreateFaction($playerFacInfo, $playerFPPProfile, $command, $sender);
+                  $create = new CreateFaction($args, $this->provider, $command, $sender);
                   $create->execute();
                 }
               } else {
