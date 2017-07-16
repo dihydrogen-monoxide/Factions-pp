@@ -12,6 +12,7 @@ use pocketmine\utils\TextFormat;
 use pocketmine\utils\Config;
 
 use HittmanA\factionspp\command\CreateFaction;
+use HittmanA\factionspp\command\Info;
 use HittmanA\factionspp\Provider;
 
 class MainClass extends PluginBase implements Listener {
@@ -44,19 +45,21 @@ class MainClass extends PluginBase implements Listener {
         {
           $economyPluginInstance = $this->getServer()->getPluginManager()->getPlugin('EconomyAPI')->getInstance();
           $economyPlugin = "EconomyS";
-          $this->getLogger()->info(TextFormat::YELLOW . "EconomyAPI enabled. Using EconomyS as economy plugin");
+          $this->getLogger()->notice("EconomyAPI enabled. Using " . TextFormat::YELLOW . "EconomyS" . TextFormat::AQUA . " as economy plugin");
         } else {
           $economyPluginInstance = null;
           $economyPlugin = null;
-          $this->getLogger()->info(TextFormat::RED . "No economy plugin :( FactionsPP is much better with an economy plugin.");
+          $this->getLogger()->notice(TextFormat::RED . "No economy plugin :( FactionsPP is much better with an economy plugin.");
         }
         
         $this->provider = new Provider($this);
         
-        $this->getLogger()->info(TextFormat::YELLOW . "Loaded!");
+        $this->getLogger()->notice("Database provider set to " . TextFormat::YELLOW . $this->provider->getProvider());
+        $this->getLogger()->notice($this->provider->getNumberOfFactions() . " factions have been loaded.");
+        $this->getLogger()->notice("Loaded!");
     }
     public function onDisable() {
-        $this->getLogger()->info(TextFormat::YELLOW . "Unloading!");
+        $this->getLogger()->info(TextFormat::GREEN . "Unloading!");
     }
     
     //Was going to use this but first I need to make PureChatReloaded
@@ -88,38 +91,7 @@ class MainClass extends PluginBase implements Listener {
       {
         //Player's display name
         $displayName = $sender->getName();
-        $playerHasFac = false;
-        $playerRegistered = false;
-        $power = 0;
-        $playerFacInfo = "";
-        $playerFPPProfile = "";
-        //Check if player is already registered in the config. If so set some helpful vars.
-        if(isset($this->playerInfo->$displayName)){
-          print($this->playerInfo->$displayName);
-          //Players info from the config.
-          $playerFPPProfile = $this->playerInfo->$displayName;
-          //Players faction from the config.
-          $playerFac = $playerFPPProfile["faction"];
-          //Players role in the faction.
-          $playerRole = $playerFPPProfile["role"];
-          //Get the information about the players faction from the faction config.
-          $playerFacInfo = $this->facs->$playerFac;
-          //Faction power
-          $power = $playerFacInfo["power"];
-          $x = $playerFacInfo["claimx"];
-          $z = $playerFacInfo["claimz"];
-          $x2 = $playerFacInfo["claimx"];
-          $z2 = $playerFacInfo["claimz"];
-          //Claim var's, not sure yet...
-          //Player exists in player config.
-          $playerRegistered = true;
-          //If player's faction is set...
-          if($playerFac !== ""){
-            //Player has a faction.
-            $playerHasFac = true;
-          }
-        }
-      
+        
         //The subcommand of the command
         $subcmd = strtolower(array_shift($args));
         
@@ -131,16 +103,31 @@ class MainClass extends PluginBase implements Listener {
               
               if($args[0] !== null || $args[0] !== "")
               {
-                if($playerHasFac == true)
+                if($this->provider->playerIsInFaction($displayName))
                 {
                   $sender->sendMessage(TextFormat::RED . "You are already in a faction! You must leave your faction to create a new one.");
                   return true;
                 } else {
                   $create = new CreateFaction($args, $this->provider, $command, $sender);
                   $create->execute();
+                  return true;
                 }
               } else {
                 $sender->sendMessage(TextFormat::RED . "You must specify a faction name. Example: /f create Example");
+                return true;
+              }
+              
+              break;
+              
+            case "info":
+              if($this->provider->playerIsInFaction($displayName))
+              {
+                $info = new Info($args, $this->provider, $command, $sender);
+                $info->execute();
+                return true;
+              } else {
+                $sender->sendMessage(TextFormat::RED . "You must be in a faction to run this command.");
+                return true;
               }
               
               break;

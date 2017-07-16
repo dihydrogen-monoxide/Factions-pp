@@ -52,6 +52,16 @@ class Provider
         }
     }
     
+    public function getNumberOfFactions()
+    {
+        if($this->providerType == "mysql")
+        {
+           
+        } else { 
+            return count($this->factions) - 1;
+        }
+    }
+    
     public function createFaction($name, CommandSender $sender)
     {
         if($this->providerType == "mysql")
@@ -83,6 +93,47 @@ class Provider
             $this->playerInfo->save(true);
             
             return true;
+        }
+    }
+    
+    public function removeFaction($faction)
+    {
+        if($this->providerType == "mysql")
+        {
+           
+        } else {
+            $this->factions->remove($faction);
+            //Save the faction config.
+            $this->factions->save(true);
+            //And the player info.
+            $this->playerInfo->save(true);
+            
+            return true;
+        }
+    }
+    
+    public function removePlayerFromFaction($player)
+    {
+        if($this->providerType == "mysql")
+        {
+           
+        } else {
+            
+        }
+    }
+    
+    public function playerIsInFaction($player)
+    {
+        if($this->providerType == "mysql")
+        {
+           
+        } else {
+            if(isset(getPlayer($player)->faction))
+            {
+               return true;
+            } else {
+                return false;
+            }
         }
     }
 
