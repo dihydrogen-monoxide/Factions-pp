@@ -10,7 +10,7 @@ use pocketmine\utils\Config;
 
 use HittmanA\factionspp\Provider;
 
-class CreateFaction
+class Info
 {
     
     public function __construct($args, $provider, Command $command, CommandSender $sender)

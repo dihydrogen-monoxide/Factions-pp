@@ -3,41 +3,50 @@ namespace HittmanA\factionspp\provider;
 
 use HittmanA\factionspp\MainClass;
 
+use pocketmine\IPlayer;
 use pocketmine\Player;
 use pocketmine\utils\Config;
 use pocketmine\command\CommandSender;
 
-class YAMLProvider implements Provider{
-	
+class YAMLProvider extends BaseProvider implements Provider{
+
+	/** @var Config */
+	protected $factions;
+	/** @var Config */
+	protected $users;
+	/** @var Config */
+	protected $claims;
+
 	public function __construct(MainClass $plugin){
+		parent::__construct($plugin);
 		$this->plugin = $plugin;
 		$this->factions = new Config($this->plugin->getDataFolder() . "factions.yml", Config::YAML, []);
         $this->users = new Config($this->plugin->getDataFolder() . "players.yml", Config::YAML, []);
         $this->claims = new Config($this->plugin->getDataFolder() . "claims.yml", Config::YAML, []);
 	}
 	
-	public function getProvider()
+	public function getProvider(): string
     {
         return "yaml";
     }
    
-    public function getFaction($name)
+    public function getFaction(string $name): array
     {
         return $this->factions->$name;
     }
     
-    public function getPlayer($player)
+    public function getPlayer(IPlayer $player): array
     {
-        $playerName = $player->getDisplayName();
+        $playerName = strtolower($player->getName());
         return $this->users->$playerName;
     }
     
-    public function getNumberOfFactions()
+    public function getNumberOfFactions(): int
     {
-        return count($this->factions) - 1;
+        return count($this->factions->getAll()) - 1;
     }
     
-    public function createFaction($name, CommandSender $sender)
+    public function createFaction(string $name, IPlayer $sender): bool
     {
         $this->factions->set($name, [
             "name" => strtolower($name),
@@ -58,33 +67,33 @@ class YAMLProvider implements Provider{
             "faction" => $name,
             "role" => "Leader"
         ]);
-        save();
+        $this->save();
     
         return true;
     }
     
-    public function removeFaction($faction)
+    public function removeFaction(string $faction): bool
     {
         $this->factions->remove($faction);
         //Save the faction config.
-        save();
+        $this->save();
         
         return true;
     }
     
-    public function removePlayerFromFaction($player)
+    public function removePlayerFromFaction(IPlayer $player): bool
     {
-        getPlayer($player)->faction = "";
-        getPlayer($player)->role = "";
+        $this->getPlayer($player)->faction = "";
+        $this->getPlayer($player)->role = "";
         
-        save();
+        $this->save();
         
         return true;
     }
     
-    public function playerIsInFaction($player)
+    public function playerIsInFaction(IPlayer $player): bool
     {
-        if(isset(getPlayer($player)->faction))
+        if(isset($this->getPlayer($player)["faction"]))
         {
             return true;
         } else {

@@ -5,47 +5,48 @@ namespace HittmanA\factionspp\provider;
 use HittmanA\factionspp\MainClass;
 
 use pocketmine\command\CommandSender;
+use pocketmine\IPlayer;
 
 interface Provider{
-	public function __construct(MainClass $plugin);
 	/**
-	 * @param \pocketmine\Player|string $player
+	 * @param IPlayer $player
 	 * @return bool
 	 */
-	public function playerIsInFaction($player);
-	/**
-	 * @param string $name
-	 * @param \pocketmine\command\CommandSender|CommandSender $sender
-	 * @return bool
-	 */
-	public function createFaction($name, CommandSender $sender);
+	public function playerIsInFaction(IPlayer $player): bool;
 	/**
 	 * @param string $name
+	 * @param IPlayer $sender
 	 * @return bool
 	 */
-	public function removeFaction($name);
+	public function createFaction(string $name, IPlayer $player): bool;
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
+	public function removeFaction(string $name): bool;
 	/**
 	 * @param string $name
 	 * @return array
 	 */
-	public function getFaction($name);
+	public function getFaction(string $name): array;
 	/**
-	 * @param \pocketmine\Player|string $player
+	 * @param IPlayer $player
 	 * @return array
 	 */
-	public function getPlayer($player);
+	public function getPlayer(IPlayer $player): array;
 	/**
-	 * @param \pocketmine\Player|string $player
+	 * @param IPlayer $player
 	 * @return bool
 	 */
-	public function removePlayerFromFaction($player);
+	public function removePlayerFromFaction(IPlayer $player): bool;
 	/**
 	 * @return string
 	 */
-	public function getProvider();
+	public function getProvider(): string;
 	/**
-	 * @return float
+	 * @return int
 	 */
-	public function getNumberOfFactions();
+	public function getNumberOfFactions(): int;
+	
 	public function save();
 }

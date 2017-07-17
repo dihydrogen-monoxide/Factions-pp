@@ -2,6 +2,8 @@
 
 namespace HittmanA\factionspp;
 
+use HittmanA\factionspp\provider\BaseProvider;
+use HittmanA\factionspp\provider\MySQLProvider;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
@@ -25,6 +27,8 @@ class MainClass extends PluginBase implements Listener {
     protected $economyPluginInstance = "";
 
     protected $invites = [];
+    /** @var BaseProvider */
+    private $provider = null;
     
     public function onEnable() {
         //Make the faction config
@@ -114,7 +118,7 @@ class MainClass extends PluginBase implements Listener {
               
               if($args[0] !== null || $args[0] !== "")
               {
-                if($this->provider->playerIsInFaction($displayName))
+                if($this->provider->playerIsInFaction($sender))
                 {
                   $sender->sendMessage(TextFormat::RED . "You are already in a faction! You must leave your faction to create a new one.");
                   return true;
@@ -131,7 +135,7 @@ class MainClass extends PluginBase implements Listener {
               break;
               
             case "info":
-              if($this->provider->playerIsInFaction($displayName))
+              if($this->provider->playerIsInFaction($sender))
               {
                 $info = new Info($args, $this->provider, $command, $sender);
                 $info->execute();
