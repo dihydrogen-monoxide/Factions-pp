@@ -13,7 +13,8 @@ use pocketmine\utils\Config;
 
 use HittmanA\factionspp\command\CreateFaction;
 use HittmanA\factionspp\command\Info;
-use HittmanA\factionspp\Provider;
+use HittmanA\factionspp\provider\Provider;
+use HittmanA\factionspp\provider\YAMLProvider;
 
 class MainClass extends PluginBase implements Listener {
     /** @var Config */
@@ -41,7 +42,7 @@ class MainClass extends PluginBase implements Listener {
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->getServer()->getPluginManager()->registerEvents(new Events($this), $this);
 
-        if($this->getServer()->getPluginManager()->getPlugin('EconomyAPI')->getInstance())
+        if($this->getServer()->getPluginManager()->getPlugin('EconomyAPI'))
         {
           $economyPluginInstance = $this->getServer()->getPluginManager()->getPlugin('EconomyAPI')->getInstance();
           $economyPlugin = "EconomyS";
@@ -52,7 +53,17 @@ class MainClass extends PluginBase implements Listener {
           $this->getLogger()->notice(TextFormat::RED . "No economy plugin :( FactionsPP is much better with an economy plugin.");
         }
         
-        $this->provider = new Provider($this);
+        switch(strtolower($this->getConfig()->get("provider"))){
+    			case "yaml":
+    			$this->provider = new YAMLProvider($this);
+    			break;
+    			case "mysql":
+    			$this->provider = new MySQLProvider($this);
+    			break;
+    			default:
+    			$this->getLogger()->critical("Invalid database was given.");
+    			return false;
+    		}
         
         $this->getLogger()->notice("Database provider set to " . TextFormat::YELLOW . $this->provider->getProvider());
         $this->getLogger()->notice($this->provider->getNumberOfFactions() . " factions have been loaded.");
@@ -86,7 +97,7 @@ class MainClass extends PluginBase implements Listener {
       
     }*/
     
-    public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool {
       if($command->getName() == "factionspp")
       {
         //Player's display name
