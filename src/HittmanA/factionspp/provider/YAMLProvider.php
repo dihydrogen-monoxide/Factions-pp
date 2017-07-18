@@ -51,7 +51,7 @@ class YAMLProvider extends BaseProvider implements Provider{
         $this->factions->set($name, [
             "name" => strtolower($name),
             "display" => $name,
-            "leader" => $sender->getName(),
+            "leader" => strtolower($sender->getName()),
             "officers" => [],
             "members" => [],
             "power" => 5,
@@ -63,7 +63,7 @@ class YAMLProvider extends BaseProvider implements Provider{
         ]);
         //And make a new player profile in the player config.
         $this->users->set($sender->getName(),[
-            "name" => $sender->getName(),
+            "name" => strtolower($sender->getName()),
             "faction" => $name,
             "role" => "Leader"
         ]);
