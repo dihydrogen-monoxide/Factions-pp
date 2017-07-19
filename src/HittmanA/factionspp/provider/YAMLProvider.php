@@ -76,9 +76,6 @@ class YAMLProvider extends BaseProvider implements Provider{
         $this->users->set(strtolower($sender->getName()),[
             "name" => strtolower($sender->getName()),
             "faction" => strtolower($name),
-        $this->users->set($sender->getName(),[
-            "name" => strtolower($sender->getName()),
-            "faction" => $name,
             "role" => "Leader"
         ]);
         $this->save();
