@@ -30,28 +30,39 @@ class YAMLProvider extends BaseProvider implements Provider{
         return "yaml";
     }
    
-    public function getFaction(string $name): array
+    public function getFaction(string $factionName): array
     {
-        return $this->factions->$name;
+        $name = strtolower($factionName);
+        if($this->factions->get($name) == false)
+        {
+            return array();
+        } else {
+            return $this->factions->get($name);
+        }
     }
     
     public function getPlayer(IPlayer $player): array
     {
         $playerName = strtolower($player->getName());
-        return $this->users->$playerName;
+        if($this->users->get($playerName) == false)
+        {
+            return array();
+        } else {
+            return $this->users->get($playerName);
+        }
     }
     
     public function getNumberOfFactions(): int
     {
-        return count($this->factions->getAll()) - 1;
+        return count($this->factions->getAll());
     }
     
     public function createFaction(string $name, IPlayer $sender): bool
     {
-        $this->factions->set($name, [
+        $this->factions->set(strtolower($name), [
             "name" => strtolower($name),
             "display" => $name,
-            "leader" => $sender->getName(),
+            "leader" => strtolower($sender->getName()),
             "officers" => [],
             "members" => [],
             "power" => 5,
@@ -62,9 +73,9 @@ class YAMLProvider extends BaseProvider implements Provider{
             "claimz2" => $sender->getZ() - 9
         ]);
         //And make a new player profile in the player config.
-        $this->users->set($sender->getName(),[
-            "name" => $sender->getName(),
-            "faction" => $name,
+        $this->users->set(strtolower($sender->getName()),[
+            "name" => strtolower($sender->getName()),
+            "faction" => strtolower($name),
             "role" => "Leader"
         ]);
         $this->save();

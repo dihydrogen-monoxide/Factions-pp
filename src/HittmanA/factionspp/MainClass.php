@@ -70,7 +70,13 @@ class MainClass extends PluginBase implements Listener {
     		}
         
         $this->getLogger()->notice("Database provider set to " . TextFormat::YELLOW . $this->provider->getProvider());
-        $this->getLogger()->notice($this->provider->getNumberOfFactions() . " factions have been loaded.");
+        if($this->provider->getNumberOfFactions() == 1)
+        {
+          $this->getLogger()->notice($this->provider->getNumberOfFactions() . " faction has been loaded.");
+        } else {
+          $this->getLogger()->notice($this->provider->getNumberOfFactions() . " factions have been loaded.");
+        }
+        
         $this->getLogger()->notice("Loaded!");
     }
     public function onDisable() {
@@ -116,7 +122,7 @@ class MainClass extends PluginBase implements Listener {
             
             case "create":
               
-              if($args[0] !== null || $args[0] !== "")
+              if(isset($args[0]))
               {
                 if($this->provider->playerIsInFaction($sender))
                 {

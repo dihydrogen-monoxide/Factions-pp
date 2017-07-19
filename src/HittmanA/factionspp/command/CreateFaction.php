@@ -32,7 +32,7 @@ class CreateFaction
 		    {
                 $this->sender->sendMessage(TextFormat::RED . "That faction already exists! Please choose a different name.");
 		    } else {
-		        $this->provider->createFaction($this->args[0], $this->sender);
+		        $this->provider->createFaction($this->args[0], $this->sender->getServer()->getPlayer($this->sender->getName()));
 		        $this->sender->sendMessage(TextFormat::GREEN . "Your new faction has been made!");
 		    }
 		}

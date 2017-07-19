@@ -24,15 +24,15 @@ class Info
     public function execute()
     {
         
-        $player = $this->provider->getPlayer($this->sender->getName());
-        $faction = $this->provider->getFaction($player->faction);
-        $sender->sendMessage(TextFormat::GOLD . "=====Faction Info=====");
-        $sender->sendMessage(TextFormat::GREEN . "Faction: " . $faction->display);
-        $sender->sendMessage(TextFormat::GREEN . "Faction Leader: " . $faction->leader);
-        $sender->sendMessage(TextFormat::GREEN . "Your Role: " . $player->role);
-        $sender->sendMessage(TextFormat::GREEN . "Faction Power: " . $faction->power);
-        $sender->sendMessage(TextFormat::GREEN . "Faction Money: " . $faction->money);
-        $sender->sendMessage(TextFormat::GOLD . "======================");
+        $player = $this->provider->getPlayer($this->sender->getServer()->getPlayer($this->sender->getName()));
+        $faction = $this->provider->getFaction($player["faction"]);
+        $this->sender->sendMessage(TextFormat::GOLD . "=====Faction Info=====");
+        $this->sender->sendMessage(TextFormat::GREEN . "Faction: " . $faction["display"]);
+        $this->sender->sendMessage(TextFormat::GREEN . "Faction Leader: " . $faction["leader"]);
+        $this->sender->sendMessage(TextFormat::GREEN . "Your Role: " . $player["role"]);
+        $this->sender->sendMessage(TextFormat::GREEN . "Faction Power: " . $faction["power"]);
+        $this->sender->sendMessage(TextFormat::GREEN . "Faction Money: " . $faction["money"]);
+        $this->sender->sendMessage(TextFormat::GOLD . "======================");
 		
     }
     
