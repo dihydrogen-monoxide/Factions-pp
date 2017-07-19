@@ -73,9 +73,15 @@ class YAMLProvider extends BaseProvider implements Provider{
             "claimz2" => $sender->getZ() - 9
         ]);
         //And make a new player profile in the player config.
+<<<<<<< HEAD
         $this->users->set(strtolower($sender->getName()),[
             "name" => strtolower($sender->getName()),
             "faction" => strtolower($name),
+=======
+        $this->users->set($sender->getName(),[
+            "name" => strtolower($sender->getName()),
+            "faction" => $name,
+>>>>>>> origin/master
             "role" => "Leader"
         ]);
         $this->save();
