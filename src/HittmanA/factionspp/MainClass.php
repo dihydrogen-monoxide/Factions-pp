@@ -320,7 +320,7 @@ class MainClass extends PluginBase implements Listener {
                 $sender->sendMessage(TextFormat::YELLOW . "You must be an officer or leader to invite new players to your faction.");
               }
             } else {
-              $sender->sendMessage(TextFormat::YELLOW . "You must specify a player. Example: /f invite <player>");
+              $sender->sendMessage(TextFormat::YELLOW . "You must specify a player. Example: /f invite JohnDoe");
             }
           }
         } else {

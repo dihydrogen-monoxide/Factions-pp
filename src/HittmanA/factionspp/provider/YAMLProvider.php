@@ -23,6 +23,7 @@ class YAMLProvider extends BaseProvider implements Provider{
 		$this->factions = new Config($this->plugin->getDataFolder() . "factions.yml", Config::YAML, []);
         $this->users = new Config($this->plugin->getDataFolder() . "players.yml", Config::YAML, []);
         $this->claims = new Config($this->plugin->getDataFolder() . "claims.yml", Config::YAML, []);
+        $this->invites = new Config($this->plugin->getDataFolder() . "invites.yml", Config::YAML, []);
 	}
 	
 	public function getProvider(): string
@@ -112,10 +113,22 @@ class YAMLProvider extends BaseProvider implements Provider{
         }
     }
     
+    public function newInvite(IPlayer $to, IPlayer, $from): bool
+    {
+        $this->invites->set(strtolower($to->getName()),[
+            "to" => strtolower($to->getName()),
+            "from" => strtolower($from->getName())
+        ]);
+        $this->save();
+        
+        return true;
+    }
+    
     public function save()
     {
         $this->factions->save();
         $this->users->save();
         $this->claims->save();
+        $this->invites->save();
     }
 }
