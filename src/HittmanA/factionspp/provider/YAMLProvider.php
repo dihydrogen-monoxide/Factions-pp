@@ -40,12 +40,7 @@ class YAMLProvider extends BaseProvider implements Provider{
     public function getPlayer(IPlayer $player): array
     {
         $playerName = strtolower($player->getName());
-        if($this->users->get($playerName) == false)
-        {
-            return array();
-        } else {
-            return $this->users->get($playerName);
-        }
+        return $this->users->get($playerName, []);
     }
     
     public function getNumberOfFactions(): int
