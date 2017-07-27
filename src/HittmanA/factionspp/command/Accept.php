@@ -21,11 +21,13 @@ class Accept
 
     public function execute()
     {
-        if (!$this->sender instanceof Player) {
+        if(!$this->sender instanceof Player)
+        {
             $this->sender->sendMessage(TextFormat::RED . "You can only execute this command as a player.");
             return;
         }
-        if (!$this->provider->hasInvite($this->sender)) {
+        if(!$this->provider->hasInvite($this->sender))
+        {
             $this->sender->sendMessage(TextFormat::RED . "You don't have any open faction invites.");
             return;
         }

@@ -38,9 +38,12 @@ class YAMLProvider extends BaseProvider implements Provider
     public function getFaction(string $factionName): array
     {
         $name = strtolower($factionName);
-        if ($this->factions->get($name) == false) {
+        if($this->factions->get($name) == false)
+        {
             return array();
-        } else {
+        }
+        else
+        {
             return $this->factions->get($name);
         }
     }
@@ -110,16 +113,19 @@ class YAMLProvider extends BaseProvider implements Provider
     public function getPlayer(IPlayer $player): array
     {
         $playerName = strtolower($player->getName());
-        if ($this->users->get($playerName) == false) {
+        if($this->users->get($playerName) == false)
+        {
             return array();
-        } else {
+        }
+        else
+        {
             return $this->users->get($playerName);
         }
     }
 
     public function acceptInvite(IPlayer $player): bool
     {
-        if (!$this->hasInvite($player)) {
+        if(!$this->hasInvite($player)) {
             return false;
         }
         $faction = $this->getPlayer($player)["faction"];
@@ -138,7 +144,7 @@ class YAMLProvider extends BaseProvider implements Provider
 
     public function hasInvite(IPlayer $player): bool
     {
-        if (!$this->invites->exists(strtolower($player->getName()))) {
+        if(!$this->invites->exists(strtolower($player->getName()))) {
             return false;
         }
         return true;
@@ -146,9 +152,12 @@ class YAMLProvider extends BaseProvider implements Provider
 
     public function playerIsInFaction(IPlayer $player): bool
     {
-        if (isset($this->getPlayer($player)["faction"])) {
+        if(isset($this->getPlayer($player)["faction"]))
+        {
             return true;
-        } else {
+        }
+        else
+        {
             return false;
         }
     }

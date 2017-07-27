@@ -2,8 +2,10 @@
 
 namespace HittmanA\factionspp;
 
+use HittmanA\factionspp\command\Accept;
 use HittmanA\factionspp\command\CreateFaction;
 use HittmanA\factionspp\command\Info;
+use HittmanA\factionspp\command\Invite;
 use HittmanA\factionspp\provider\BaseProvider;
 use HittmanA\factionspp\provider\MySQLProvider;
 use HittmanA\factionspp\provider\YAMLProvider;
@@ -20,11 +22,11 @@ class MainClass extends PluginBase implements Listener
 
     /** @var Config */
     protected $fac;
-
+    /** @var string */
     protected $economyPlugin = "";
-
+    /** @var string */
     protected $economyPluginInstance = "";
-
+    /** @var array */
     protected $invites = [];
     /** @var BaseProvider */
     private $provider = null;
@@ -46,17 +48,21 @@ class MainClass extends PluginBase implements Listener
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->getServer()->getPluginManager()->registerEvents(new Events($this), $this);
 
-        if ($this->getServer()->getPluginManager()->getPlugin('EconomyAPI')) {
+        if($this->getServer()->getPluginManager()->getPlugin('EconomyAPI'))
+        {
             $this->economyPluginInstance = $this->getServer()->getPluginManager()->getPlugin('EconomyAPI');
             $this->economyPlugin = "EconomyS";
             $this->getLogger()->notice("EconomyAPI enabled. Using " . TextFormat::YELLOW . "EconomyS" . TextFormat::AQUA . " as economy plugin");
-        } else {
+        }
+        else
+        {
             $this->economyPluginInstance = null;
             $this->economyPlugin = null;
             $this->getLogger()->notice(TextFormat::RED . "No economy plugin :( FactionsPP is much better with an economy plugin.");
         }
 
-        switch (strtolower($this->getConfig()->get("provider"))) {
+        switch(strtolower($this->getConfig()->get("provider")))
+        {
             case "yaml":
                 $this->provider = new YAMLProvider($this);
                 break;
@@ -70,9 +76,12 @@ class MainClass extends PluginBase implements Listener
         }
 
         $this->getLogger()->notice("Database provider set to " . TextFormat::YELLOW . $this->provider->getProvider());
-        if ($this->provider->getNumberOfFactions() == 1) {
+        if($this->provider->getNumberOfFactions() == 1)
+        {
             $this->getLogger()->notice($this->provider->getNumberOfFactions() . " faction has been loaded.");
-        } else {
+        }
+        else
+        {
             $this->getLogger()->notice($this->provider->getNumberOfFactions() . " factions have been loaded.");
         }
 
@@ -110,25 +119,70 @@ class MainClass extends PluginBase implements Listener
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool
     {
-        if ($command->getName() == "factionspp") {
+        if($command->getName() == "factionspp")
+        {
             //The subcommand of the command
-            $subcmd = strtolower(array_shift($args));
+            $subCmd = strtolower(array_shift($args));
 
-            if ($sender instanceof Player) {
-                switch ($subcmd) {
+            if ($sender instanceof Player)
+            {
+                switch ($subCmd)
+                {
+                    case "accept":
+
+                        if($this->provider->playerIsInFaction($sender))
+                        {
+                            $sender->sendMessage(TextFormat::RED . "You must leave your current faction to join a new one.");
+                            return true;
+                        }
+                        $accept = new Accept($args, $this->provider, $command, $sender);
+                        $accept->execute();
+                        return true;
+
+                    case "invite":
+
+                        if(isset($args[0]))
+                        {
+                            if(!$this->provider->playerIsInFaction($sender))
+                            {
+                                $sender->sendMessage(TextFormat::RED . "You are not a member of any faction.");
+                                return true;
+                            }
+                            $role = $this->provider->getPlayer($sender)["role"];
+                            if($role !== Member::MEMBER_LEADER && $role !== Member::MEMBER_OFFICER)
+                            {
+                                $sender->sendMessage(TextFormat::RED . "Only officers and leaders are allowed to invite new members.");
+                                return true;
+                            }
+                            $invite = new Invite($args, $this->provider, $command, $sender);
+                            $invite->execute();
+                            return true;
+                        }
+                        else
+                        {
+                            $sender->sendMessage(TextFormat::RED . "You must specify a player name. Example: /f invite Steve");
+                            return true;
+                        }
+                        break;
 
                     case "create":
 
-                        if (isset($args[0])) {
-                            if ($this->provider->playerIsInFaction($sender)) {
+                        if(isset($args[0]))
+                        {
+                            if($this->provider->playerIsInFaction($sender))
+                            {
                                 $sender->sendMessage(TextFormat::RED . "You are already in a faction! You must leave your faction to create a new one.");
                                 return true;
-                            } else {
+                            }
+                            else
+                            {
                                 $create = new CreateFaction($args, $this->provider, $command, $sender);
                                 $create->execute();
                                 return true;
                             }
-                        } else {
+                        }
+                        else
+                        {
                             $sender->sendMessage(TextFormat::RED . "You must specify a faction name. Example: /f create Example");
                             return true;
                         }
@@ -136,11 +190,13 @@ class MainClass extends PluginBase implements Listener
                         break;
 
                     case "info":
-                        if ($this->provider->playerIsInFaction($sender)) {
+                        if($this->provider->playerIsInFaction($sender))
+                        {
                             $info = new Info($args, $this->provider, $command, $sender);
                             $info->execute();
                             return true;
-                        } else {
+                        } else
+                        {
                             $sender->sendMessage(TextFormat::RED . "You must be in a faction to run this command.");
                             return true;
                         }
@@ -152,7 +208,9 @@ class MainClass extends PluginBase implements Listener
 
                 }
                 return true;
-            } else {
+            }
+            else
+            {
                 $sender->sendMessage(TextFormat::RED . "You must be a player to run FactionsPP commands!");
                 return true;
             }
@@ -329,5 +387,4 @@ class MainClass extends PluginBase implements Listener
       return true;
       }
     }*/
-
 }
