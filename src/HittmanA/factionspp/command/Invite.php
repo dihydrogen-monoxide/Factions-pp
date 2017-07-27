@@ -2,18 +2,16 @@
 
 namespace HittmanA\factionspp\command;
 
+use HittmanA\factionspp\provider\BaseProvider;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
-use pocketmine\utils\Config;
-
-use HittmanA\factionspp\Provider;
 
 class Invite
 {
     
-    public function __construct($args, $provider, Command $command, CommandSender $sender)
+    public function __construct(array $args, BaseProvider $provider, Command $command, CommandSender $sender)
     {
         $this->args = $args;
         $this->command = $command;
@@ -23,15 +21,20 @@ class Invite
     
     public function execute()
     {
-     
-        if(strtolower($this->sender->getName()) != strtolower($this->args[0]))
+
+    	if(!$this->sender instanceof Player)
+	    {
+	    	$this->sender->sendMessage(TextFormat::RED . "You can only execute this command as a player.");
+	    	return;
+	    }
+        if(strtolower($this->sender->getName()) !== strtolower($this->args[0]))
         {
-            $from = $this->sender->getServer()->getPlayer($this->sender->getName());
+            $from = $this->sender;
             $to = $this->sender->getServer()->getPlayer($this->args[0]);
             
-            if($to->isOnline() == true)
+            if($to !== null)
             {
-                if($this->provider->playerIsInFaction($to) == true)
+                if($this->provider->playerIsInFaction($to) === true)
                 {
                     $from->sendMessage(TextFormat::RED . "Sorry, " . $to->getName() . " is already in a faction. They must leave their faction before they can join yours");
                 } else {

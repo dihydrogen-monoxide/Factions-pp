@@ -2,10 +2,8 @@
 
 namespace HittmanA\factionspp\provider;
 
-use HittmanA\factionspp\MainClass;
-
-use pocketmine\command\CommandSender;
 use pocketmine\IPlayer;
+use pocketmine\Player;
 
 interface Provider{
 	/**
@@ -15,10 +13,10 @@ interface Provider{
 	public function playerIsInFaction(IPlayer $player): bool;
 	/**
 	 * @param string $name
-	 * @param IPlayer $sender
+	 * @param Player $sender
 	 * @return bool
 	 */
-	public function createFaction(string $name, IPlayer $player): bool;
+	public function createFaction(string $name, Player $player): bool;
 	/**
 	 * @param string $name
 	 * @return bool
@@ -47,6 +45,28 @@ interface Provider{
 	 * @return int
 	 */
 	public function getNumberOfFactions(): int;
+
+	/**
+	 * @param IPlayer $to
+	 * @param IPlayer $from
+	 *
+	 * @return bool
+	 */
+	public function newInvite(IPlayer $to, IPlayer $from): bool;
+
+	/**
+	 * @param IPlayer $player
+	 *
+	 * @return bool
+	 */
+	public function hasInvite(IPlayer $player): bool;
+
+	/**
+	 * @param IPlayer $player
+	 *
+	 * @return bool
+	 */
+	public function acceptInvite(IPlayer $player): bool;
 	
 	public function save();
 }

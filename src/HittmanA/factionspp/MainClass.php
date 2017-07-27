@@ -9,13 +9,11 @@ use pocketmine\command\CommandSender;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Config;
 
 use HittmanA\factionspp\command\CreateFaction;
 use HittmanA\factionspp\command\Info;
-use HittmanA\factionspp\provider\Provider;
 use HittmanA\factionspp\provider\YAMLProvider;
 
 class MainClass extends PluginBase implements Listener {
@@ -48,25 +46,26 @@ class MainClass extends PluginBase implements Listener {
 
         if($this->getServer()->getPluginManager()->getPlugin('EconomyAPI'))
         {
-          $economyPluginInstance = $this->getServer()->getPluginManager()->getPlugin('EconomyAPI')->getInstance();
-          $economyPlugin = "EconomyS";
+          $this->economyPluginInstance = $this->getServer()->getPluginManager()->getPlugin('EconomyAPI');
+          $this->economyPlugin = "EconomyS";
           $this->getLogger()->notice("EconomyAPI enabled. Using " . TextFormat::YELLOW . "EconomyS" . TextFormat::AQUA . " as economy plugin");
         } else {
-          $economyPluginInstance = null;
-          $economyPlugin = null;
+          $this->economyPluginInstance = null;
+          $this->economyPlugin = null;
           $this->getLogger()->notice(TextFormat::RED . "No economy plugin :( FactionsPP is much better with an economy plugin.");
         }
         
         switch(strtolower($this->getConfig()->get("provider"))){
     			case "yaml":
-    			$this->provider = new YAMLProvider($this);
-    			break;
+    			    $this->provider = new YAMLProvider($this);
+    			    break;
     			case "mysql":
-    			$this->provider = new MySQLProvider($this);
-    			break;
+    			    $this->provider = new MySQLProvider($this);
+    			    break;
     			default:
-    			$this->getLogger()->critical("Invalid database was given.");
-    			return false;
+    			    $this->getLogger()->error("Invalid database was given. Selecting YAML data provider as default.");
+    			    $this->provider = new YAMLProvider($this);
+    			    break;
     		}
         
         $this->getLogger()->notice("Database provider set to " . TextFormat::YELLOW . $this->provider->getProvider());
@@ -79,6 +78,7 @@ class MainClass extends PluginBase implements Listener {
         
         $this->getLogger()->notice("Loaded!");
     }
+
     public function onDisable() {
         $this->getLogger()->info(TextFormat::GREEN . "Unloading!");
     }
@@ -110,9 +110,6 @@ class MainClass extends PluginBase implements Listener {
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool {
       if($command->getName() == "factionspp")
       {
-        //Player's display name
-        $displayName = $sender->getName();
-        
         //The subcommand of the command
         $subcmd = strtolower(array_shift($args));
         
@@ -163,6 +160,7 @@ class MainClass extends PluginBase implements Listener {
           return true;
         }
       }
+      return false;
     }
     
   /*public function onCommand(CommandSender $sender, Command $command, $label, array $args) {

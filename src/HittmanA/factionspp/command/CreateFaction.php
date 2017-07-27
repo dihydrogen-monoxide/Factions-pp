@@ -2,18 +2,15 @@
 
 namespace HittmanA\factionspp\command;
 
+use HittmanA\factionspp\provider\BaseProvider;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\Player;
 use pocketmine\utils\TextFormat;
-use pocketmine\utils\Config;
-
-use HittmanA\factionspp\Provider;
 
 class CreateFaction
 {
     
-    public function __construct($args, $provider, Command $command, CommandSender $sender)
+    public function __construct(array $args, BaseProvider $provider, Command $command, CommandSender $sender)
     {
         $this->args = $args;
         $this->command = $command;
@@ -24,10 +21,13 @@ class CreateFaction
     public function execute()
     {
         
-        if(!$this->sender->hasPermission("fpp.command.create")){
-            
-			return true;
-		} else {
+        if(!$this->sender->hasPermission("fpp.command.create"))
+        {
+            $this->sender->sendMessage(TextFormat::RED . "You don't have permission to you use this subcommand.");
+			return;
+		}
+		else
+        {
 		    if($this->provider->getFaction($this->args[0]))
 		    {
                 $this->sender->sendMessage(TextFormat::RED . "That faction already exists! Please choose a different name.");

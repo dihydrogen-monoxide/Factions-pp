@@ -2,16 +2,26 @@
 
 namespace HittmanA\factionspp\provider;
 
-
 use HittmanA\factionspp\MainClass;
 use pocketmine\IPlayer;
+use pocketmine\Player;
 
 class SQLiteProvider extends BaseProvider implements Provider {
-	
-	private $database;
-	
+
 	public function __construct(MainClass $plugin){
 		parent::__construct($plugin);
+	}
+
+	public function newInvite(IPlayer $to, IPlayer $from): bool {
+		// TODO: Implement newInvite() method.
+	}
+
+	public function hasInvite(IPlayer $player): bool {
+		// TODO: Implement hasInvite() method.
+	}
+
+	public function acceptInvite(IPlayer $player): bool {
+		// TODO: Implement acceptInvite() method.
 	}
 
 	public function initialize(): bool{
@@ -27,7 +37,7 @@ class SQLiteProvider extends BaseProvider implements Provider {
 		// TODO: Implement playerIsInFaction() method.
 	}
 
-	public function createFaction(string $name, IPlayer $player): bool
+	public function createFaction(string $name, Player $player): bool
 	{
 		// TODO: Implement createFaction() method.
 	}

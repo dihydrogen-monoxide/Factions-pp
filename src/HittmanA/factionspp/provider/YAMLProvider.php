@@ -3,10 +3,10 @@ namespace HittmanA\factionspp\provider;
 
 use HittmanA\factionspp\MainClass;
 
+use HittmanA\factionspp\Member;
 use pocketmine\IPlayer;
 use pocketmine\Player;
 use pocketmine\utils\Config;
-use pocketmine\command\CommandSender;
 
 class YAMLProvider extends BaseProvider implements Provider{
 
@@ -16,8 +16,11 @@ class YAMLProvider extends BaseProvider implements Provider{
 	protected $users;
 	/** @var Config */
 	protected $claims;
+	/** @var Config */
+	protected $invites;
 
-	public function __construct(MainClass $plugin){
+	public function __construct(MainClass $plugin)
+	{
 		parent::__construct($plugin);
 		$this->plugin = $plugin;
 		$this->factions = new Config($this->plugin->getDataFolder() . "factions.yml", Config::YAML, []);
@@ -58,7 +61,7 @@ class YAMLProvider extends BaseProvider implements Provider{
         return count($this->factions->getAll());
     }
     
-    public function createFaction(string $name, IPlayer $sender): bool
+    public function createFaction(string $name, Player $sender): bool
     {
         $this->factions->set(strtolower($name), [
             "name" => strtolower($name),
@@ -74,10 +77,10 @@ class YAMLProvider extends BaseProvider implements Provider{
             "claimz2" => $sender->getZ() - 9
         ]);
         //And make a new player profile in the player config.
-        $this->users->set(strtolower($sender->getName()),[
+        $this->users->set(strtolower($sender->getName()), [
             "name" => strtolower($sender->getName()),
             "faction" => strtolower($name),
-            "role" => "Leader"
+            "role" => Member::MEMBER_LEADER
         ]);
         $this->save();
     
@@ -95,15 +98,48 @@ class YAMLProvider extends BaseProvider implements Provider{
     
     public function removePlayerFromFaction(IPlayer $player): bool
     {
-        $this->getPlayer($player)->faction = "";
-        $this->getPlayer($player)->role = "";
-        
+    	$faction = $this->getPlayer($player)["faction"];
+
+    	$members = $this->factions->get($faction)["members"];
+    	unset($members[strtolower($player->getName())]);
+    	$this->factions->setNested($faction . ".members", $members);
+        $this->users->remove(strtolower($player->getName()));
+
         $this->save();
         
         return true;
     }
-    
-    public function playerIsInFaction(IPlayer $player): bool
+
+	public function hasInvite(IPlayer $player): bool
+	{
+		if(!$this->invites->exists(strtolower($player->getName())))
+		{
+			return false;
+		}
+		return true;
+	}
+
+	public function acceptInvite(IPlayer $player): bool
+	{
+		if(!$this->hasInvite($player))
+		{
+			return false;
+		}
+		$faction = $this->getPlayer($player)["faction"];
+		$this->invites->remove(strtolower($player->getName()));
+		$this->users->set(strtolower($player->getName()), [
+			"name" => strtolower($player->getName()),
+			"faction" => $faction,
+			"role" => Member::MEMBER_DEFAULT
+		]);
+		$members = $this->factions->get($faction)["members"];
+		$members[] = strtolower($player->getName());
+		$this->factions->setNested($faction . ".members", $members);
+		$this->save();
+		return true;
+	}
+
+	public function playerIsInFaction(IPlayer $player): bool
     {
         if(isset($this->getPlayer($player)["faction"]))
         {
@@ -113,9 +149,9 @@ class YAMLProvider extends BaseProvider implements Provider{
         }
     }
     
-    public function newInvite(IPlayer $to, IPlayer, $from): bool
+    public function newInvite(IPlayer $to, IPlayer $from): bool
     {
-        $this->invites->set(strtolower($to->getName()),[
+        $this->invites->set(strtolower($to->getName()), [
             "to" => strtolower($to->getName()),
             "from" => strtolower($from->getName())
         ]);
