@@ -9,7 +9,7 @@ use pocketmine\utils\TextFormat;
 
 class Info
 {
-    
+
     public function __construct(array $args, BaseProvider $provider, Command $command, CommandSender $sender)
     {
         $this->args = $args;
@@ -17,10 +17,10 @@ class Info
         $this->sender = $sender;
         $this->provider = $provider;
     }
-    
+
     public function execute()
     {
-        
+
         $player = $this->provider->getPlayer($this->sender->getServer()->getPlayer($this->sender->getName()));
         $faction = $this->provider->getFaction($player["faction"]);
         $this->sender->sendMessage(TextFormat::GOLD . "===== Faction Info =====");
@@ -30,7 +30,7 @@ class Info
         $this->sender->sendMessage(TextFormat::GREEN . "Faction Power: " . $faction["power"]);
         $this->sender->sendMessage(TextFormat::GREEN . "Faction Money: " . $faction["money"]);
         $this->sender->sendMessage(TextFormat::GOLD . "======================");
-		
+
     }
-    
+
 }
