@@ -66,8 +66,8 @@ class MainClass extends PluginBase implements Listener
             case "yaml":
                 $this->provider = new YAMLProvider($this);
                 break;
-            case "mysql":
-                $this->provider = new MySQLProvider($this);
+            case "json":
+                $this->provider = new JSONProvider($this);
                 break;
             default:
                 $this->getLogger()->error("Invalid database was given. Selecting YAML data provider as default.");
