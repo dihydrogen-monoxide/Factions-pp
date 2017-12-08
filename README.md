@@ -12,4 +12,4 @@ __Any contributions are *greatly* appreciated!__
 - [ ] Basic faction functionallity
 - [ ] All basic factions commands
 - [ ] Squash all da bugs
-- [ ] Separate subcommands into their own files
+- [x] Separate subcommands into their own files
