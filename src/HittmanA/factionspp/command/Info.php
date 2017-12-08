@@ -21,15 +21,36 @@ class Info
     public function execute()
     {
 
-        $player = $this->provider->getPlayer($this->sender->getServer()->getPlayer($this->sender->getName()));
-        $faction = $this->provider->getFaction($player["faction"]);
-        $this->sender->sendMessage(TextFormat::GOLD . "===== Faction Info =====");
-        $this->sender->sendMessage(TextFormat::GREEN . "Faction: " . $faction["display"]);
-        $this->sender->sendMessage(TextFormat::GREEN . "Faction Leader: " . $faction["leader"]);
-        $this->sender->sendMessage(TextFormat::GREEN . "Your Role: " . $player["role"]);
-        $this->sender->sendMessage(TextFormat::GREEN . "Faction Power: " . $faction["power"]);
-        $this->sender->sendMessage(TextFormat::GREEN . "Faction Money: " . $faction["money"]);
-        $this->sender->sendMessage(TextFormat::GOLD . "======================");
+        if(!isset($this->args[0]))
+        {
+            $player = $this->provider->getPlayer($this->sender->getServer()->getPlayer($this->sender->getName()));
+            $faction = $this->provider->getFaction($player["faction"]);
+            $this->sender->sendMessage(TextFormat::GOLD . "===== Faction Info =====");
+            $this->sender->sendMessage(TextFormat::GREEN . "Faction: " . $faction["display"]);
+            $this->sender->sendMessage(TextFormat::GREEN . "Faction Leader: " . $faction["leader"]);
+            $this->sender->sendMessage(TextFormat::GREEN . "Your Role: " . $player["role"]);
+            $this->sender->sendMessage(TextFormat::GREEN . "Faction Power: " . $faction["power"]);
+            $this->sender->sendMessage(TextFormat::GREEN . "Faction Money: " . $faction["money"]);
+            $this->sender->sendMessage(TextFormat::GOLD . "======================");
+        }
+        else
+        {
+            $faction = $this->provider->getFaction($this->args[0]);
+            if($faction !== [])
+            {
+                $this->sender->sendMessage(TextFormat::GOLD . "===== Faction Info =====");
+                $this->sender->sendMessage(TextFormat::GREEN . "Faction: " . $faction["display"]);
+                $this->sender->sendMessage(TextFormat::GREEN . "Faction Leader: " . $faction["leader"]);
+                $this->sender->sendMessage(TextFormat::GREEN . "Your Role: " . $player["role"]);
+                $this->sender->sendMessage(TextFormat::GREEN . "Faction Power: " . $faction["power"]);
+                $this->sender->sendMessage(TextFormat::GREEN . "Faction Money: " . $faction["money"]);
+                $this->sender->sendMessage(TextFormat::GOLD . "======================");
+            }
+            else
+            {
+                $this->sender->sendMessage(TextFormat::RED . "That faction doesn't exist.");
+            }
+        }
 
     }
 

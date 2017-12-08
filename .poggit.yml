@@ -5,4 +5,5 @@ branches:
 projects:
   Factions-pp:
     path: ""
+    icon: FPP.png
 ...
