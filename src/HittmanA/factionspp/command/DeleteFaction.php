@@ -35,7 +35,7 @@ class DeleteFaction
             }
             else
             {
-                $faction = $this->provider->getFaction()$factionName;
+                $faction = $this->provider->getFaction($factionName);
                 for($i = 0; $i < count($faction["members"]); $i++)
                 {
                     $player = $this->sender->getServer()->getPlayer($faction["members"][$i]);
