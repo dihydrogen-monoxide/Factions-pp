@@ -38,12 +38,12 @@ class DeleteFaction
                 $faction = $this->provider->getFaction()$factionName;
                 for($i = 0; $i < count($faction["members"]); $i++)
                 {
-                    $player = $this->sender->getServer()->getPlayer($faction["members"][$i])
+                    $player = $this->sender->getServer()->getPlayer($faction["members"][$i]);
                     $this->provider->removePlayerFromFaction($player);
                 }
                 for($i = 0; $i < count($faction["officers"]); $i++)
                 {
-                    $player = $this->sender->getServer()->getPlayer($faction["officers"][$i])
+                    $player = $this->sender->getServer()->getPlayer($faction["officers"][$i]);
                     $this->provider->removePlayerFromFaction($player);
                 }
                 $this->provider->removePlayerFromFaction($this->sender);
