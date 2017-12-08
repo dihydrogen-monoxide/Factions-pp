@@ -8,6 +8,7 @@ use HittmanA\factionspp\command\CreateFaction;
 use HittmanA\factionspp\command\Info;
 use HittmanA\factionspp\command\Invite;
 use HittmanA\factionspp\command\DeleteFaction;
+use HittmanA\factionspp\command\MOTD;
 //Providers
 use HittmanA\factionspp\provider\BaseProvider;
 use HittmanA\factionspp\provider\MySQLProvider;
@@ -210,12 +211,28 @@ class MainClass extends PluginBase implements Listener
                         break;
 
                     case "info":
-                        if($this->provider->playerIsInFaction($sender))
+                        if($this->provider->playerIsInFaction($sender) || isset($args[0]))
                         {
                             $info = new Info($args, $this->provider, $command, $sender);
                             $info->execute();
                             return true;
-                        } else
+                        }
+                        else
+                        {
+                            $sender->sendMessage(TextFormat::RED . "You must be in a faction to run this command.");
+                            return true;
+                        }
+
+                        break;
+
+                    case "motd":
+                        if($this->provider->playerIsInFaction($sender))
+                        {
+                            $motd = new MOTD($args, $this->provider, $command, $sender);
+                            $motd->execute();
+                            return true;
+                        }
+                        else
                         {
                             $sender->sendMessage(TextFormat::RED . "You must be in a faction to run this command.");
                             return true;
