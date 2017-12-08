@@ -84,6 +84,8 @@ class YAMLProvider extends BaseProvider implements Provider
     {
         $this->factions->setNested($name . ".motd", $motd);
         $this->save();
+
+        return true;
     }
 
     public function save()
