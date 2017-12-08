@@ -9,6 +9,7 @@ use HittmanA\factionspp\command\Invite;
 use HittmanA\factionspp\provider\BaseProvider;
 use HittmanA\factionspp\provider\MySQLProvider;
 use HittmanA\factionspp\provider\YAMLProvider;
+use HittmanA\factionspp\provider\JSONProvider;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\event\Listener;

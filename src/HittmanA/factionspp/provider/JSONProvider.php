@@ -27,7 +27,7 @@ class JSONProvider extends BaseProvider implements Provider
       $this->factions = new Config($this->plugin->getDataFolder() . "factions.json", Config::JSON, []);
       $this->users = new Config($this->plugin->getDataFolder() . "players.json", Config::JSON, []);
       $this->claims = new Config($this->plugin->getDataFolder() . "claims.json", Config::JSON, []);
-      $this->invites = new Config($this->plugin->getDataFolder() . "invites.yml", Config::JSON, []);
+      $this->invites = new Config($this->plugin->getDataFolder() . "invites.json", Config::JSON, []);
   }
 
   public function getProvider(): string
