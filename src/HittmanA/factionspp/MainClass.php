@@ -2,14 +2,18 @@
 
 namespace HittmanA\factionspp;
 
+//Commands
 use HittmanA\factionspp\command\Accept;
 use HittmanA\factionspp\command\CreateFaction;
 use HittmanA\factionspp\command\Info;
 use HittmanA\factionspp\command\Invite;
+use HittmanA\factionspp\command\DeleteFaction;
+//Providers
 use HittmanA\factionspp\provider\BaseProvider;
 use HittmanA\factionspp\provider\MySQLProvider;
 use HittmanA\factionspp\provider\YAMLProvider;
 use HittmanA\factionspp\provider\JSONProvider;
+//PocketMine
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\event\Listener;
@@ -185,6 +189,21 @@ class MainClass extends PluginBase implements Listener
                         else
                         {
                             $sender->sendMessage(TextFormat::RED . "You must specify a faction name. Example: /f create Example");
+                            return true;
+                        }
+
+                        break;
+
+                    case "delete":
+                        if(!$this->provider->playerIsInFaction($sender))
+                        {
+                            $sender->sendMessage(TextFormat::RED . "You aren't in a faction!");
+                            return true;
+                        }
+                        else
+                        {
+                            $delete = new DeleteFaction($args, $this->provider, $command, $sender);
+                            $delete->execute();
                             return true;
                         }
 
