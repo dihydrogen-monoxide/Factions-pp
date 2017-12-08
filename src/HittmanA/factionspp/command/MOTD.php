@@ -35,7 +35,7 @@ class MOTD
         else
         {
             $factionName = $this->provider->getPlayer($this->sender)["faction"];
-            if($this->provider->getPlayer($this->sender)["role"] !== Member::MEMBER_LEADER || $this->provider->getPlayer($this->sender)["role"] !== Member::MEMBER_OFFICER)
+            if($this->provider->getPlayer($this->sender)["role"] !== Member::MEMBER_LEADER && $this->provider->getPlayer($this->sender)["role"] !== Member::MEMBER_OFFICER)
             {
                 $this->sender->sendMessage(TextFormat::RED . "You do not have permission to change the motd. Only the owner and officers can do this.");
             }
