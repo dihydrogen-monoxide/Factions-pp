@@ -3,6 +3,7 @@
 namespace HittmanA\factionspp\command;
 
 use HittmanA\factionspp\provider\BaseProvider;
+use HittmanA\factionspp\Member;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
@@ -29,7 +30,7 @@ class DeleteFaction
         else
         {
             $factionName = $this->provider->getPlayer($this->sender)["faction"];
-            if($this->provider->getFaction($factionName)["leader"] != $this->sender->getName())
+            if($this->provider->getPlayer($this->sender)["role"] == MEMBER_LEADER)
             {
                 $this->sender->sendMessage(TextFormat::RED . "You do not own this faction. Only the owner of this faction may delete it.");
             }
