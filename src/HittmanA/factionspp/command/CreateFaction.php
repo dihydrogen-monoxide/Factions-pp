@@ -23,7 +23,7 @@ class CreateFaction
 
         if(!$this->sender->hasPermission("fpp.command.create"))
         {
-            $this->sender->sendMessage(TextFormat::RED . "You don't have permission to you use this subcommand.");
+            $this->sender->sendMessage(TextFormat::RED . "You don't have permission to use this subcommand.");
             return;
         }
         else

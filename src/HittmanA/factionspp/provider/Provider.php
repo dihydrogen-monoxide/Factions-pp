@@ -25,6 +25,14 @@ interface Provider
 
     /**
      * @param string $name
+     * @param string $motd
+     *
+     * @return bool
+     */
+    public function setMOTD(string $name, string $motd): bool;
+
+    /**
+     * @param string $name
      *
      * @return bool
      */

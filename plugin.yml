@@ -25,4 +25,3 @@ permissions:
             fpp.command.create:
                 default: true
                 dexcription: Allows users to create new factions
-        

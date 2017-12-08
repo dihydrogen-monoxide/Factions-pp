@@ -58,6 +58,7 @@ class JSONProvider extends BaseProvider implements Provider
       $this->factions->set(strtolower($name), [
           "name" => strtolower($name),
           "display" => $name,
+          "motd" => "This is a new faction! Use /f motd <new motd> to set a new motd.",
           "leader" => strtolower($sender->getName()),
           "officers" => [],
           "members" => [],
@@ -77,6 +78,12 @@ class JSONProvider extends BaseProvider implements Provider
       $this->save();
 
       return true;
+  }
+
+  public function setMOTD(string $name, string $motd): bool
+  {
+      $this->factions->setNested($name . ".motd", $motd);
+      $this->save();
   }
 
   public function save()
