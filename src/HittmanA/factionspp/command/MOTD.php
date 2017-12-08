@@ -25,7 +25,7 @@ class MOTD
         $motd = "";
         for($i = 0; $i < count($this->args); $i++)
         {
-            $motd += $args[i];
+            $motd += $args[$i];
         }
         if(!$this->sender->hasPermission("fpp.command.motd"))
         {
