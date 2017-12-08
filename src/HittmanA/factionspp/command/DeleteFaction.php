@@ -30,7 +30,7 @@ class DeleteFaction
         else
         {
             $factionName = $this->provider->getPlayer($this->sender)["faction"];
-            if($this->provider->getPlayer($this->sender)["role"] == MEMBER_LEADER)
+            if($this->provider->getPlayer($this->sender)["role"] == Member::MEMBER_LEADER)
             {
                 $this->sender->sendMessage(TextFormat::RED . "You do not own this faction. Only the owner of this faction may delete it.");
             }
