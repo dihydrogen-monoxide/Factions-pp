@@ -9,6 +9,7 @@ use HittmanA\factionspp\command\Info;
 use HittmanA\factionspp\command\Invite;
 use HittmanA\factionspp\command\DeleteFaction;
 use HittmanA\factionspp\command\MOTD;
+use HittmanA\factionspp\command\Kick;
 //Providers
 use HittmanA\factionspp\provider\BaseProvider;
 use HittmanA\factionspp\provider\MySQLProvider;
@@ -145,6 +146,29 @@ class MainClass extends PluginBase implements Listener
                         $accept->execute();
                         return true;
 
+                        break;
+
+                    case "kick":
+
+                        if(isset($args[0]))
+                        {
+                            if(!$this->provider->playerIsInFaction($sender))
+                            {
+                                $sender->sendMessage(TextFormat::RED . "You must be in a faction to run this command.");
+                                return true;
+                            }
+                            $kick = new Kick($args, $this->provider, $command, $sender);
+                            $kick->execute();
+                            return true;
+                        }
+                        else
+                        {
+                            $sender->sendMessage(TextFormat::RED . "You must specify a player name. Example: /f kick Steve");
+                            return true;
+                        }
+
+                        break;
+
                     case "invite":
 
                         if(isset($args[0]))
@@ -169,6 +193,7 @@ class MainClass extends PluginBase implements Listener
                             $sender->sendMessage(TextFormat::RED . "You must specify a player name. Example: /f invite Steve");
                             return true;
                         }
+                        
                         break;
 
                     case "create":
